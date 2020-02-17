@@ -5,7 +5,10 @@ spring:
     active: dev
   thymeleaf:
     cache: false
-
+  redis:
+    host: redis.metropolis.com
+    database: 0
+    port: 6379
 mybatis-plus:
   mapper-locations: classpath*:com/metropolis/authorization/dal/persistence/*Mapper.xml"
   type-aliases-package: com.metropolis.authorization.dal.entitys
