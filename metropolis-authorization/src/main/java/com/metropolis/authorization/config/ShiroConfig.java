@@ -4,6 +4,7 @@ import com.metropolis.authorization.listener.ShiroSessionListener;
 import com.metropolis.authorization.listener.ShiroSessionListenerAdapter;
 import com.metropolis.authorization.properties.ShiroProperties;
 import com.metropolis.authorization.realm.UserRealm;
+import com.metropolis.authorization.redis.RedisManager;
 import com.metropolis.authorization.session.RedisSessionDao;
 import com.metropolis.common.string.StringUtils;
 import org.apache.shiro.mgt.SecurityManager;
@@ -13,8 +14,10 @@ import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -35,7 +38,7 @@ public class ShiroConfig {
     private static final String USER = "user";
 
     @Bean
-    public SecurityManager securityManager(UserRealm userRealm){
+    public SecurityManager securityManager(UserRealm userRealm,RedisSessionDao redisSessionDao){
 
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
 
@@ -43,7 +46,7 @@ public class ShiroConfig {
         securityManager.setRealm(userRealm);
 
         //设置session 管理器
-        securityManager.setSessionManager(sessionManager());
+        securityManager.setSessionManager(sessionManager(redisSessionDao));
         // 设置缓存管理器
 //        securityManager.setCacheManager();
         //设置 cookie 模版
@@ -52,8 +55,17 @@ public class ShiroConfig {
         return securityManager;
     }
 
+    @Bean
+    public RedisManager redisManager(@Qualifier("redis4ShiroSessionDAO") RedisTemplate redisTemplate){
+        return new RedisManager(redisTemplate);
+    }
 
-    public DefaultWebSessionManager sessionManager(){
+    @Bean
+    public RedisSessionDao redisSessionDao(RedisManager redisManager){
+        return new RedisSessionDao(redisManager);
+    }
+
+    public DefaultWebSessionManager sessionManager(RedisSessionDao redisSessionDao){
 
         DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
         List<SessionListener> listeners = new ArrayList<>();
@@ -65,7 +77,7 @@ public class ShiroConfig {
         //设置监听器
         sessionManager.setSessionListeners(listeners);
         //设置 session 持久化机制
-        sessionManager.setSessionDAO(new RedisSessionDao());
+        sessionManager.setSessionDAO(redisSessionDao);
         //不支持 sessionid重写到url
         sessionManager.setSessionIdUrlRewritingEnabled(false);
         return sessionManager;

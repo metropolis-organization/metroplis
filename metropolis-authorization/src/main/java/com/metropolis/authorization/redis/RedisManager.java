@@ -1,6 +1,7 @@
 package com.metropolis.authorization.redis;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -15,11 +16,14 @@ import java.util.concurrent.TimeUnit;
  * @Author: Pop
  * @Date: 2019/9/24 14:28
  */
-@Component
+
 public class RedisManager {
 
-    @Autowired
     private RedisTemplate redisTemplate;
+
+    public RedisManager(RedisTemplate redisTemplate) {
+        this.redisTemplate = redisTemplate;
+    }
 
     public Set<String> keys(String keys){
         try {

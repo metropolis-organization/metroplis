@@ -6,8 +6,11 @@ import org.apache.shiro.session.UnknownSessionException;
 import org.apache.shiro.session.mgt.ValidatingSession;
 import org.apache.shiro.session.mgt.eis.AbstractSessionDAO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.io.Serializable;
 import java.util.Collection;
 
@@ -17,11 +20,13 @@ import java.util.Collection;
  *
  * Redis 缓存全局会话Server 版本
  */
-@Component
 public class RedisSessionDao extends AbstractSessionDAO {
 
-    @Autowired
     private RedisManager redisManager;
+
+    public RedisSessionDao(RedisManager redisManager) {
+        this.redisManager = redisManager;
+    }
 
     @Override
     protected Serializable doCreate(Session session) {
@@ -36,11 +41,11 @@ public class RedisSessionDao extends AbstractSessionDAO {
     }
 
     @Override
-    protected Session doReadSession(Serializable serializable) {
+    protected Session doReadSession(Serializable sessionId) {
 
         //根据id获取这条session
 
-        return null;
+        return (Session) redisManager.get((String) sessionId);
     }
 
     @Override
