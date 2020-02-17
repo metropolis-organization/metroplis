@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: metropolis-authorization
+  profiles:
+    active: dev
+  thymeleaf:
+    cache: false
+
+mybatis-plus:
+  mapper-locations: classpath*:com/metropolis/authorization/dal/persistence/*Mapper.xml"
+  type-aliases-package: com.metropolis.authorization.dal.entitys

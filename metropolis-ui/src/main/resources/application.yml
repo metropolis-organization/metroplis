@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: metropolis-ui
+  profiles:
+    active: dev
+#  thymeleaf:
+#    cache: false
+#    prefix:
+#      classpath: /templates
+#  resources:
+#    static-locations: classpath:/static/
+#  mvc:
+#    static-path-pattern: /static/**
+server:
+  port: 8086
+
+
