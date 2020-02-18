@@ -30,8 +30,9 @@
     <mybatis-plus.version>3.2.0</mybatis-plus.version>
     <druid.version>1.1.19</druid.version>
     <fastjson.version>1.2.62</fastjson.version>
-    <!--<jedis.version>2.9.0</jedis.version>-->
 
+    <!--<jedis.version>2.9.0</jedis.version>-->
+    <thymeleaf-shiro.version>2.0.0</thymeleaf-shiro.version>
     <spring-shiro.veriosn>1.4.2</spring-shiro.veriosn>
     <spring-redis.version>2.2.1.RELEASE</spring-redis.version>
 
@@ -64,6 +65,12 @@
         <version>${spring-boot.version}</version>
         <type>pom</type>
         <scope>import</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>com.github.theborakompanioni</groupId>
+        <artifactId>thymeleaf-extras-shiro</artifactId>
+        <version>${thymeleaf-shiro.version}</version>
       </dependency>
 
       <dependency>

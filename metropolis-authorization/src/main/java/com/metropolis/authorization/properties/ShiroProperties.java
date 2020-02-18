@@ -20,5 +20,7 @@ public class ShiroProperties {
     private String logoutUrl;
     private String unauthorizedUrl;
     private long sessionTimeout;
+    private String sessionEncryptKey;
     private int cookieTimeout;
+    private String cacheTimeout;
 }

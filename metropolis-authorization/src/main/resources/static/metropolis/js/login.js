@@ -9,10 +9,12 @@ layui.use(['form','layer'],function(){
     //提交登录表单
     form.on('submit(login-submit)', function (data) {
         $.post('/login', data.field, function (r) {
-            if (r.code === 000000) {
-                location.href =  '/index';
+            if (r.code === '000000') {
+                layer.msg(r.message);
+                location.href="http://localhost:8080/index";
             } else {
                 layer.msg(r.message);
+                location.href="http://localhost:8080/index";
                 // loading.hide();
                 // initCode();
             }

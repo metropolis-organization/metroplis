@@ -8,12 +8,12 @@ import com.metropolis.authorization.service.ISysRoleService;
 import com.metropolis.authorization.service.ISysUserService;
 import com.metropolis.authorization.utils.PassworkHelper;
 import com.metropolis.common.string.StringUtils;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -43,7 +43,8 @@ public class UserRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        String username = (String) principalCollection.getPrimaryPrincipal();
+        SysUser user = (SysUser) principalCollection.getPrimaryPrincipal();
+        String username = user.getUsername();
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
 
         List<SysRole> roles = roleService.findRolesByUsername(username);
@@ -82,5 +83,13 @@ public class UserRealm extends AuthorizingRealm {
         }
 
         return new SimpleAuthenticationInfo(user,password,getName());
+    }
+
+    /**
+     * 清空缓存，在需要清空身份和权限缓存的地方，调用这个方法
+     */
+    public void clearCache(){
+        PrincipalCollection principals = SecurityUtils.getSubject().getPrincipals();
+        super.clearCache(principals);
     }
 }

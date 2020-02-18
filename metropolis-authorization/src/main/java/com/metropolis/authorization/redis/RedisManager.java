@@ -7,9 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -94,6 +92,26 @@ public class RedisManager {
     public Object get(String key) {
         return key == null ? null : redisTemplate.opsForValue().get(key);
     }
+
+    /**
+     * 批量获取缓存
+     * @param keys
+     * @param <K>
+     * @param <V>
+     * @return
+     */
+    public <K,V> Collection<K> mget(Collection<V> keys){
+        try{
+            if(Objects.isNull(keys)&&keys.size()>0){
+                return redisTemplate.opsForValue().multiGet(keys);
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return Collections.emptyList();
+    }
+
     /**
      * 普通缓存放入
      * @param key 键
@@ -129,6 +147,8 @@ public class RedisManager {
             return false;
         }
     }
+
+
     /**
      * 递增
      * @param key 键

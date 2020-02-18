@@ -29,7 +29,7 @@ public class LoginController extends ShiroController{
         //验证码 后续添加
         UsernamePasswordToken token = new UsernamePasswordToken();
         //授权
-        super.login(super.getToken(user));
+        super.login(super.getToken(user,rememberMe));
 
         return Response.OK;
     }

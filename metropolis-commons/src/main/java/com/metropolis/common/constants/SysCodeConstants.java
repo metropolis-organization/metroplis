@@ -13,6 +13,7 @@ public enum  SysCodeConstants{
     SUCCESS                             ("000000", "成功"),
 
     USERORPASSWORD_ERRROR               ("003001","用户名或密码不正确"),
+    SESSION_TIMEOUT_FAILED              ("003008","session过期，请重新登陆"),
     TOKEN_VALID_FAILED                  ("003002","token校验失败"),
     USERNAME_ALREADY_EXISTS             ("003003","用户名已存在"),
     USER_REGISTER_FAILED                ("003004","注册失败，请联系管理员"),

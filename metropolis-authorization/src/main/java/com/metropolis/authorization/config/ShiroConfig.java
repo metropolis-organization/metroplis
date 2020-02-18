@@ -1,5 +1,7 @@
 package com.metropolis.authorization.config;
 
+import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
+import com.metropolis.authorization.cache.RedisCacheManager;
 import com.metropolis.authorization.listener.ShiroSessionListener;
 import com.metropolis.authorization.listener.ShiroSessionListenerAdapter;
 import com.metropolis.authorization.properties.ShiroProperties;
@@ -7,9 +9,12 @@ import com.metropolis.authorization.realm.UserRealm;
 import com.metropolis.authorization.redis.RedisManager;
 import com.metropolis.authorization.session.RedisSessionDao;
 import com.metropolis.common.string.StringUtils;
+import org.apache.shiro.codec.Base64;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.SessionListener;
+import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
+import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
@@ -19,6 +24,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -38,7 +44,8 @@ public class ShiroConfig {
     private static final String USER = "user";
 
     @Bean
-    public SecurityManager securityManager(UserRealm userRealm,RedisSessionDao redisSessionDao){
+    public SecurityManager securityManager(UserRealm userRealm,RedisSessionDao redisSessionDao,
+                                           RedisCacheManager redisCacheManager){
 
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
 
@@ -48,9 +55,9 @@ public class ShiroConfig {
         //设置session 管理器
         securityManager.setSessionManager(sessionManager(redisSessionDao));
         // 设置缓存管理器
-//        securityManager.setCacheManager();
+        securityManager.setCacheManager(redisCacheManager);
         //设置 cookie 模版
-//        securityManager.setRememberMeManager();
+        securityManager.setRememberMeManager(cookieRememberMeManager());
 
         return securityManager;
     }
@@ -61,8 +68,20 @@ public class ShiroConfig {
     }
 
     @Bean
-    public RedisSessionDao redisSessionDao(RedisManager redisManager){
-        return new RedisSessionDao(redisManager);
+    public RedisCacheManager redisCacheManager(RedisManager redisManager,ShiroProperties shiroProperties){
+        return new RedisCacheManager(redisManager,shiroProperties);
+    }
+
+    @Bean
+    public RedisSessionDao redisSessionDao(RedisManager redisManager,ShiroProperties shiroProperties){
+        return new RedisSessionDao(redisManager,shiroProperties);
+    }
+
+    @Bean
+    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(SecurityManager securityManager) {
+        AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
+        authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
+        return authorizationAttributeSourceAdvisor;
     }
 
     public DefaultWebSessionManager sessionManager(RedisSessionDao redisSessionDao){
@@ -109,13 +128,30 @@ public class ShiroConfig {
         return shiroFilterFactoryBean;
     }
 
+    /**
+     * 用于开启 Thymeleaf 中的 shiro 标签的使用
+     *
+     * @return ShiroDialect shiro 方言对象
+     */
+    @Bean
+    public ShiroDialect shiroDialect() {
+        return new ShiroDialect();
+    }
 
-    public SimpleCookie shiroCookie(){
+    private SimpleCookie shiroCookie(){
         SimpleCookie cookie = new SimpleCookie("rememberMe");
         cookie.setMaxAge(shiroProperties.getCookieTimeout());
         return cookie;
     }
 
+    private CookieRememberMeManager cookieRememberMeManager(){
+        CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
+        cookieRememberMeManager.setCookie(shiroCookie());
+        byte[] keyBytes = shiroProperties.getSessionEncryptKey().getBytes(Charset.forName("utf-8"));
+        String encryptKey = Base64.decodeToString(keyBytes);
+        cookieRememberMeManager.setCipherKey(Base64.decode(encryptKey));
+        return cookieRememberMeManager;
+    }
 
 
 }
