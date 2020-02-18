@@ -50,4 +50,18 @@ public class ObjectRedisSerializer implements RedisSerializer<Object> {
         }
         return result;
     }
+
+    /**
+     *
+     * 需要序列化的对象，transient 修饰后，需要更加简练的传输，或个人定制
+     */
+    private void writeObject(ObjectOutputStream outputStream){
+        //  s.defaultWriteObject();
+        // 默认写行为后，追加写
+    }
+    private void readObject(ObjectInputStream inputStream){
+        // s.defaultReadObject();
+        // 默认写读为后，追加读
+    }
+    //二者需要保持顺序一致
 }
