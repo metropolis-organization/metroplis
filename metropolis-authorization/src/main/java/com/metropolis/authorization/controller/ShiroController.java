@@ -38,4 +38,5 @@ public class ShiroController {
         return new UsernamePasswordToken(user.getUsername(),user.getPassword(),false);
     }
 
+
 }

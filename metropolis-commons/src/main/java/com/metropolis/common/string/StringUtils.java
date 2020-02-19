@@ -9,6 +9,12 @@ import java.util.regex.Pattern;
  */
 public final class StringUtils {
 
+    public static boolean isEmpty(String target){
+        return target==null?true:"".equals(target)?true:false;
+    }
+
+    public static boolean nonEmpty(String target){return !isEmpty(target);}
+
     public static String buildString(char[] chars){return new String(chars);}
 
     /**
@@ -29,6 +35,8 @@ public final class StringUtils {
      * @return
      */
     public static boolean equals(String target,String src){return target.equals(src);}
+    public static boolean equalsIgnore(String target,String src){return target.equalsIgnoreCase(src);}
+    public static boolean nonEquals(String target,String src){return !equals(target,src);}
+    public static boolean nonEqualsIgnore(String target,String src){return !equalsIgnore(target, src);}
 
-    public static boolean nonEquals(String target,String src){return !target.equals(src);}
 }

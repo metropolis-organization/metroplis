@@ -1,5 +1,6 @@
 package com.metropolis.authorization.web.exception;
 
+import com.metropolis.authorization.validate.exception.ValidateCodeException;
 import com.metropolis.common.constants.SysCodeConstants;
 import com.metropolis.common.entity.Response;
 import lombok.extern.slf4j.Slf4j;
@@ -24,5 +25,10 @@ public class DefaultExceptionRestHandler {
     }
 
 
+    @ExceptionHandler({ValidateCodeException.class})
+    public Response processValidateCodeException(ValidateCodeException e) {
+        log.warn(e.getMessage());
+        return new Response("003XXX",e.getMessage());
+    }
 
 }

@@ -2,8 +2,11 @@
 layui.use(['form','layer'],function(){
 
     var $ = layui.jquery,
+        $code=$("#codeimg"),
         form = layui.form,
         layer = layui.layer;
+
+    initCode();
 
     //登陆监听
     //提交登录表单
@@ -14,13 +17,22 @@ layui.use(['form','layer'],function(){
                 location.href="http://localhost:8080/index";
             } else {
                 layer.msg(r.message);
-                location.href="http://localhost:8080/index";
+                // location.href="http://localhost:8080/index";
                 // loading.hide();
                 // initCode();
             }
         });
         return false;
     });
+
+
+    /* 重新生成验证码*/
+    $code.click(function(e){
+        console.log("触发点击事件");
+        initCode();
+    })
+
+    function initCode(){$code.attr("src","/captcha?time="+new Date().getTime());}
 
     //注册监听
     //提交注册表单
@@ -45,3 +57,4 @@ layui.use(['form','layer'],function(){
         return false;
     });
 });
+

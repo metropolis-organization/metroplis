@@ -31,6 +31,7 @@
     <druid.version>1.1.19</druid.version>
     <fastjson.version>1.2.62</fastjson.version>
     <hessian.version>4.0.38</hessian.version>
+    <easy-captcha.version>1.6.2</easy-captcha.version>
 
     <!--<jedis.version>2.9.0</jedis.version>-->
     <thymeleaf-shiro.version>2.0.0</thymeleaf-shiro.version>
@@ -85,6 +86,16 @@
         <!--<artifactId>jedis</artifactId>-->
         <!--<version></version>-->
       <!--</dependency>-->
+
+      <!-- 验证码生成插件
+        https://gitee.com/whvse/EasyCaptcha
+      -->
+      <dependency>
+        <groupId>com.github.whvcse</groupId>
+        <artifactId>easy-captcha</artifactId>
+        <version>${easy-captcha.version}</version>
+      </dependency>
+
       <dependency>
         <groupId>com.caucho</groupId>
         <artifactId>hessian</artifactId>

@@ -23,9 +23,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.util.Base64Utils;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -147,9 +150,9 @@ public class ShiroConfig {
     private CookieRememberMeManager cookieRememberMeManager(){
         CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
         cookieRememberMeManager.setCookie(shiroCookie());
-        byte[] keyBytes = shiroProperties.getSessionEncryptKey().getBytes(Charset.forName("utf-8"));
-        String encryptKey = Base64.decodeToString(keyBytes);
-        cookieRememberMeManager.setCipherKey(Base64.decode(encryptKey));
+        byte[] encryptKeyBytes = shiroProperties.getSessionEncryptKey().getBytes(StandardCharsets.UTF_8);
+        String rememberKey = Base64Utils.encodeToString(Arrays.copyOf(encryptKeyBytes, 16));
+        cookieRememberMeManager.setCipherKey(Base64.decode(rememberKey));
         return cookieRememberMeManager;
     }
 
