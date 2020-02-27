@@ -13,9 +13,10 @@ public class Response extends HashMap<String,Object> {
 
     public static Response OK = new Response(SysCodeConstants.SUCCESS);
     public static Response USERORPASSWORD_ERRROR = new Response(SysCodeConstants.USERORPASSWORD_ERRROR);
+    public static Response TOKEN_VALID_FAILED = new Response(SysCodeConstants.TOKEN_VALID_FAILED);
 
-    private static final String CODE = "code";
-    private static final String MESSAGE = "message";
+    public static final String CODE = "code";
+    public static final String MESSAGE = "message";
 
     public Response(SysCodeConstants constants) {
         put(CODE,constants.getCode());

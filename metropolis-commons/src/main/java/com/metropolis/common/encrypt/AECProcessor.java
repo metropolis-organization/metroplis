@@ -2,6 +2,7 @@ package com.metropolis.common.encrypt;
 
 import com.metropolis.common.encrypt.exception.UnFoundAccessKeyException;
 import com.metropolis.common.encrypt.exception.UnFoundAppIDException;
+import com.metropolis.common.redis.serialize.HessianRedisSerializer;
 import org.springframework.util.StringUtils;
 
 import javax.crypto.*;
@@ -12,6 +13,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.Date;
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 /**
  *
@@ -27,7 +30,12 @@ public class AECProcessor {
     private static final int SAFE_LEVEL_192= 192;// 128 192 256
     private static final int SAFE_LEVEL_256= 256;
 
+    private static HessianRedisSerializer serializer = new HessianRedisSerializer();
 
+    public static String serialize2String(Object o){ return Base64.getEncoder().encodeToString(serialize(o)); }
+    public static Object string2Deserialize(String s){ return deserialize(Base64.getDecoder().decode(s)); }
+    public static byte[] serialize(Object o){ return serializer.serialize(o); }
+    public static Object deserialize(byte[] bytes){return serializer.deserialize(bytes);}
 
     //全局超时时间设置
     /**
@@ -204,13 +212,16 @@ public class AECProcessor {
      */
     public static boolean checkToken(String token){
         TimeDto dto=parseToken(token);
+        if(Objects.isNull(dto)){return false;}
         return dto.getCurrDate().after(dto.getTokenDate());
     }
 
     private static TimeDto parseToken(String token){
         TimeDto timeDto = new TimeDto();
         timeDto.setCurrDate(new Date(System.currentTimeMillis()));
-        timeDto.setTokenDate(TokenTime.getTime(token));
+        Date tokenDate = TokenTime.getTime(token);
+        if(Objects.isNull(tokenDate)){return null;}
+        timeDto.setTokenDate(tokenDate);
         return timeDto;
     }
 
@@ -241,40 +252,41 @@ public class AECProcessor {
         //reigster
 //        UUID appId = UUID.randomUUID();
 //        String key=AECProcessor.getStrKeyAES64(SAFE_LEVEL_192);
-//        // todo 入库
-//
-//
+//        System.out.println(key);
+////        // todo 入库
+////
+////
 //        String accessKey = getStrKeyAES64(SAFE_LEVEL_192);
-        String accessKey = "hlWgmjyIbWRksk8UKP0iOa5qEs3aggF5";
-        System.out.println(accessKey);
-
-        String usernamepassword = "up";
-//        String ens = encrypt64(s,accessKey);//加密
-
-        //appid username password  增加签名
-        String appId = "zr-test";
-        Code code = new Code("zr-test","username","password");
-        String signature = AECProcessor.signature(code,accessKey);
+////        String accessKey = "hlWgmjyIbWRksk8UKP0iOa5qEs3aggF5";
+//        System.out.println(accessKey);
+//
+//        String usernamepassword = "up";
+////        String ens = encrypt64(s,accessKey);//加密
+//
+//        //appid username password  增加签名
+//        String appId = "zr-test";
+//        Code code = new Code("zr-test","username","password");
+//        String signature = AECProcessor.signature(code,accessKey);
 
         //通过写个方法，将这四个参数 appid username password 签名发送这边 login(code)
 //===============================================================================================
         //一段传输后 服务端收到了这四个参数 验证签名是否正确
 
 
-        if(checkSignature(signature, code, new AppDao() {
-            @Override
-            public String getAccessKeyByAppId(String appId) {
-
-                return "hlWgmjyIbWRksk8UKP0iOa5qEs3aggF5";
-            }
-        })){
-            System.out.println("验证通过，发放Token");
-            // todo login operation
-//            String token = token();//token的生产方式
-//            token(TokenTime.SECOND,60);
-        }else{
-            System.out.println("验证失败，拒绝登陆");
-        }
+//        if(checkSignature(signature, code, new AppDao() {
+//            @Override
+//            public String getAccessKeyByAppId(String appId) {
+//
+//                return "hlWgmjyIbWRksk8UKP0iOa5qEs3aggF5";
+//            }
+//        })){
+//            System.out.println("验证通过，发放Token");
+//            // todo login operation
+////            String token = token();//token的生产方式
+////            token(TokenTime.SECOND,60);
+//        }else{
+//            System.out.println("验证失败，拒绝登陆");
+//        }
 
 
 
@@ -285,13 +297,25 @@ public class AECProcessor {
 //        byte[] encode = AECProcessor.encrypt("ABC".getBytes(),
 //                secretKey);
 //        System.out.println("编码后: "+new String(encode));
-//
+////
 //        byte[] decode = AECProcessor.decrypt(encode,secretKey);
 //        System.out.println("解码后: "+new String(decode));
 //        String token = token(TokenTime.MINUTE,1);
-//        String token = "HzZIPwS5Ire32q+k3S6UuA==";
-//        System.out.println(token);
+////        String token = "HzZIPwS5Ire32q+k3S6UuA==";
+////        System.out.println(token);
 //        String oldToken = new String(decrypt(Base64.getDecoder().decode(token),TIME_KEY));
+//        if(checkToken(token)){
+//            System.out.println("token已经超时");
+//
+//        }else{
+//            System.out.println("token还没有超时");
+//            try {
+//                TimeUnit.SECONDS.sleep(5);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//
+//        }
 //        System.out.println(oldToken);
 //        Date old=new java.util.Date(Long.valueOf(oldToken));
 //
@@ -300,30 +324,31 @@ public class AECProcessor {
 //        calendar.add(Calendar.SECOND,20);
 //        Date isOver = calendar.getTime();
 
-//        String token = AECProcessor.token(TokenTime.SECOND,60);
-////=================================================================================
-//        Thread thread = new Thread(()->{
-//
-//            while (true){
-//
-//                if(checkToken(token)){
-//                    System.out.println("token已经超时");
-//                    break;
-//                }else{
-//                    System.out.println("token还没有超时");
-//                    try {
-//                        TimeUnit.SECONDS.sleep(5);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                    continue;
-//                }
-//
-//            }
-//
-//        });
-//        thread.start();
-//        thread.join();
+        String token = AECProcessor.token(TokenTime.SECOND,60);
+        System.out.println(token);
+//=================================================================================
+        Thread thread = new Thread(()->{
+
+            while (true){
+
+                if(checkToken(token)){
+                    System.out.println("token已经超时");
+                    break;
+                }else{
+                    System.out.println("token还没有超时");
+                    try {
+                        TimeUnit.SECONDS.sleep(5);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    continue;
+                }
+
+            }
+
+        });
+        thread.start();
+        thread.join();
 
     }
 

@@ -34,6 +34,7 @@
     <easy-captcha.version>1.6.2</easy-captcha.version>
 
     <!--<jedis.version>2.9.0</jedis.version>-->
+    <httpclient.veriosn>4.5.2</httpclient.veriosn>
     <thymeleaf-shiro.version>2.0.0</thymeleaf-shiro.version>
     <spring-shiro.veriosn>1.4.2</spring-shiro.veriosn>
     <spring-redis.version>2.2.1.RELEASE</spring-redis.version>
@@ -86,6 +87,13 @@
         <!--<artifactId>jedis</artifactId>-->
         <!--<version></version>-->
       <!--</dependency>-->
+
+      <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpclient</artifactId>
+        <version>${httpclient.veriosn}</version>
+      </dependency>
+
 
       <!-- 验证码生成插件
         https://gitee.com/whvse/EasyCaptcha

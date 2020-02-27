@@ -2,13 +2,15 @@ package com.metropolis.common.redis.serialize;
 
 import com.caucho.hessian.io.HessianInput;
 import com.caucho.hessian.io.HessianOutput;
+import com.metropolis.common.encrypt.AECProcessor;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.io.Serializable;
+import java.util.Base64;
 import java.util.Objects;
 
 /**
@@ -60,5 +62,34 @@ public class HessianRedisSerializer implements RedisSerializer<Object> {
             }
         }
         return result;
+    }
+
+    public static void main(String[] args) {
+        User user = new User("pp");
+        HessianRedisSerializer  hessianRedisSerializer = new HessianRedisSerializer();
+        byte[] bytes = hessianRedisSerializer.serialize(user);
+        String o = new String(bytes);
+//        Base64.getEncoder().encodeToString(bytes);
+        String encodeString = Base64.getEncoder().encodeToString(bytes);
+        byte[] dbytes = Base64.getDecoder().decode(encodeString);
+//        System.out.println(Base64.getEncoder().encodeToString(bytes));
+        User user1= (User) hessianRedisSerializer.deserialize(dbytes);
+        System.out.println(user);
+    }
+
+}
+
+class User implements Serializable {
+    private String name;
+
+    public User(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "name='" + name + '\'' +
+                '}';
     }
 }

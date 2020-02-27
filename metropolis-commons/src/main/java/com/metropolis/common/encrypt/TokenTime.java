@@ -19,7 +19,7 @@ public enum TokenTime {
     private static final String MARK = "#";
     public static Date getTime(String token){
         try {
-            String originalToken = Aec.getDecoder().decode(token,Aec.TIME_KEY);
+            String originalToken = Aec.getDecoder().decode(token,AECProcessor.TIME_KEY);
             int markIndex =originalToken.indexOf(MARK);
             if(markIndex==-1){throw new TokenTimeParseException(" 不合法的 token 时间戳 "); }
             String unit = originalToken.substring(markIndex,markIndex+2);

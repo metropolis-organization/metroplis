@@ -16,11 +16,12 @@
     <shiro:guest>你没有登陆</shiro:guest>
     <shiro:authenticated>你验证通过</shiro:authenticated>
     <shiro:principal>权限</shiro:principal>
-    <shiro:user></shiro:user>
-    <!--<div shiro:hasRole="scott">你是scott</div>-->
-    <!--<div shiro:hasRole="admin">你是admin</div>-->
-    <!--<div shiro:hasRole="user:add">有添加权限</div>-->
-    <!--<div shiro:hasRole="user:create">有添加权限</div>-->
+    <!--<shiro:user></shiro:user>-->
+    <div shiro:hasRole="scott">你是scott</div>
+    <div shiro:hasRole="admin">你是admin</div>
+    <div shiro:hasPermission="user:add">有添加权限</div>
+    <div shiro:hasPermission="user:create">有添加权限</div>
+    <div shiro:hasPermission="user:view">有查看权限</div>
 </div>
 <script th:src="@{/layui/layui.js}"></script>
 </body>
