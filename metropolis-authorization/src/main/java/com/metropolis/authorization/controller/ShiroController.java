@@ -1,6 +1,7 @@
 package com.metropolis.authorization.controller;
 
 import com.metropolis.authorization.dal.entitys.SysUser;
+import com.metropolis.common.web.dto.SysUserDto;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -17,8 +18,8 @@ public class ShiroController {
         return SecurityUtils.getSubject();
     }
 
-    protected SysUser getCurrentUser() {
-        return (SysUser) getSubject().getPrincipal();
+    protected SysUserDto getCurrentUser() {
+        return (SysUserDto) getSubject().getPrincipal();
     }
 
     protected Session getSession() {

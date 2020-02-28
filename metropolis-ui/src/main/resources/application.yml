@@ -3,19 +3,4 @@
     name: metropolis-ui
   profiles:
     active: dev
-  redis:
-      host: redis.metropolis.com
-      database: 0
-      port: 6379
-
-#  thymeleaf:
-#    cache: false
-#    prefix:
-#      classpath: /templates
-#  resources:
-#    static-locations: classpath:/static/
-#  mvc:
-#    static-path-pattern: /static/**
-server:
-  port: 8087
 

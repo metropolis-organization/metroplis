@@ -9,6 +9,10 @@ import com.metropolis.common.encrypt.TokenTime;
 import com.metropolis.common.entity.Response;
 import com.metropolis.common.sso.SsoConstant;
 import com.metropolis.common.string.StringUtils;
+import com.metropolis.common.web.HttpClients;
+import com.metropolis.common.web.QueryStrings;
+import com.metropolis.common.web.dto.SysUserDto;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,12 +24,15 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Pop
  * @date 2020/2/16 15:45
  */
 @RestController
+@Slf4j
 public class LoginController extends ShiroController{
 
     @Autowired
@@ -40,39 +47,48 @@ public class LoginController extends ShiroController{
                           HttpServletRequest request,HttpServletResponse response) throws Exception {
 
         validateCodeService.checkCode(request,verifyCode);
-        //验证码 后续添加
-        UsernamePasswordToken token = new UsernamePasswordToken();
         //授权
         super.login(super.getToken(user,rememberMe));
 
         //取出登陆成功后跳转的位置。
+
         String successUrl = request.getParameter(SsoConstant.SUCCESS_URL);
         if(StringUtils.nonEmpty(successUrl)){
             //颁发token进参数和cookie
-            SysUser sysUser=super.getCurrentUser();
-            response.sendRedirect(getSuccessUrl(successUrl,sysUser));
+            SysUserDto sysUser=super.getCurrentUser();
+            sendAuth(successUrl,sysUser);
+            response.sendRedirect(successUrl);
         }
         return Response.OK;
     }
 
+    private void sendAuth(String url,SysUserDto sysUser) throws Exception{
+        Map<String,String> map = new HashMap<>();
+        map.put(SsoConstant.U_KEY,AECProcessor.serialize2String(sysUser));
+        map.put(SsoConstant.SHIRO_TOKEN,AECProcessor.token(TokenTime.HOUR,1));
+        HttpClients.doPost(url,map);
+    }
+
     private String getSuccessUrl(String url,SysUser sysUser) throws Exception{
         StringBuilder stringBuilder = new StringBuilder(url);
-        stringBuilder.append(SsoConstant.U).append(AECProcessor.serialize2String(sysUser))
+        stringBuilder.append(SsoConstant.U).append("")
                 .append(SsoConstant.AND);
         // 默认60 秒后超时
-        stringBuilder.append(SsoConstant.SHIRO_TOKEN).append(AECProcessor.token(TokenTime.SECOND,60));
+        stringBuilder.append(SsoConstant.SHIRO_TOKEN).append(SsoConstant.EQUALS).append(AECProcessor.token(TokenTime.HOUR,1));
         return stringBuilder.toString();
     }
 
-    @GetMapping("validateToken")
-    public Response validateToken(HttpServletRequest request){
+
+    @PostMapping("validateToken")
+    public String validateToken(HttpServletRequest request){
         String token = request.getParameter(SsoConstant.SHIRO_TOKEN);
+        log.info("token 的值"+token);
         //一个验证方法
-        if(AECProcessor.checkToken(token)){
+        if(StringUtils.nonEmpty(token)&&AECProcessor.checkToken(token)){
             //验证成功后返回验证信息
-            return Response.OK;
+            return SsoConstant.SSO_OK;
         }else{
-            return Response.TOKEN_VALID_FAILED;
+            return SsoConstant.SSO_ERROR;
         }
     }
 

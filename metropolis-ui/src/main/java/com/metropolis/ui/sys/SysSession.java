@@ -12,8 +12,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class SysSession {
 
-    private ThreadLocal<SysUser> userThreadLocal = new ThreadLocal<>();
+    private ThreadLocal<UserEntity> userThreadLocal = new ThreadLocal<>();
 
-    public SysUser getCurrentUser(){ return userThreadLocal.get(); }
-    public void setCurrentUser(SysUser sysUser){userThreadLocal.set(sysUser);}
+    public UserEntity getCurrentEntity(){ return userThreadLocal.get(); }
+    public void setCurrentEntity(UserEntity entity){userThreadLocal.set(entity);}
+    public void clear(){ userThreadLocal.remove(); }
 }

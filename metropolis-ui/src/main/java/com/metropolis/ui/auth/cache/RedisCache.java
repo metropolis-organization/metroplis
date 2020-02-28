@@ -1,5 +1,6 @@
 package com.metropolis.ui.auth.cache;
 
+import com.metropolis.common.web.dto.SysUserDto;
 import com.metropolis.ui.auth.entity.SysUser;
 import com.metropolis.ui.auth.properties.ShiroProperties;
 import com.metropolis.ui.auth.redis.RedisManager;
@@ -48,6 +49,8 @@ public class RedisCache<K,V> implements Cache<K,V> {
             return CACHE_PREFIX+getPrimaryPrincipal((PrincipalCollection) k);
         }else if(k instanceof SysUser){
             return CACHE_PREFIX+((SysUser) k).getId();
+        }else if(k instanceof SysUserDto){
+            return CACHE_PREFIX+((SysUserDto) k).getId();
         }else{
             //对象的其他处理
         }

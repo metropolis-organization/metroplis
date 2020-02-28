@@ -233,7 +233,7 @@ public class Aec {
 
         public byte[] decode(byte[] content,String key) throws Exception{ return decode(content,convertStr2SecretKey64(key)); }
 
-        public String decode(String content,SecretKey key) throws Exception{ return new String(decode(Base64.getDecoder().decode(content),key)); }
+        public String decode(String content,SecretKey key) throws Exception{ return new String(decode(Base64.getMimeDecoder().decode(content),key)); }
 
         public String decode(String content,String key) throws Exception{ return new String(decode(Base64.getDecoder().decode(content),key)); }
 

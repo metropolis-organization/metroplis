@@ -8,6 +8,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * @author Pop
@@ -25,8 +26,9 @@ public class Cookies {
 
     public static Cookie getCookieByName(String name, HttpServletRequest request){
         Cookie[] cookies = request.getCookies();
+        if(Objects.isNull(cookies)){ return null;}
         for (Cookie cookie:cookies){
-            if (StringUtils.nonEquals(name,cookie.getName())){
+            if (StringUtils.equals(name,cookie.getName())){
                 return cookie;
             }
         }

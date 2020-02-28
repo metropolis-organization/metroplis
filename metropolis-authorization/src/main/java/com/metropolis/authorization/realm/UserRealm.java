@@ -8,6 +8,7 @@ import com.metropolis.authorization.service.ISysRoleService;
 import com.metropolis.authorization.service.ISysUserService;
 import com.metropolis.authorization.utils.PassworkHelper;
 import com.metropolis.common.string.StringUtils;
+import com.metropolis.common.web.dto.SysUserDto;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -43,7 +44,7 @@ public class UserRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        SysUser user = (SysUser) principalCollection.getPrimaryPrincipal();
+        SysUserDto user = (SysUserDto) principalCollection.getPrimaryPrincipal();
         String username = user.getUsername();
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
 
@@ -82,7 +83,20 @@ public class UserRealm extends AuthorizingRealm {
             throw new LockedAccountException("账号已被锁定。");
         }
 
-        return new SimpleAuthenticationInfo(user,password,getName());
+        return new SimpleAuthenticationInfo(copy(user),password,getName());
+    }
+
+    private SysUserDto copy(SysUser sysUser){
+        SysUserDto sysUserDto = new SysUserDto();
+        sysUserDto.setId(sysUser.getId());
+        sysUserDto.setCreatetime(sysUser.getCreatetime());
+        sysUserDto.setCredentialsSalt(sysUser.getCredentialsSalt());
+        sysUserDto.setIsDelete(sysUser.getIsDelete());
+        sysUserDto.setLastLoginTime(sysUser.getLastLoginTime());
+        sysUserDto.setPassword(sysUser.getPassword());
+        sysUserDto.setUsername(sysUser.getUsername());
+        sysUserDto.setLocked(sysUser.getLocked());
+        return sysUserDto;
     }
 
     /**

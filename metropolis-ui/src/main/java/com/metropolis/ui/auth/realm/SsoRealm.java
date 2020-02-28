@@ -32,7 +32,7 @@ public class SsoRealm extends AuthorizingRealm {
 
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
-        SysUser sysUser = sysSession.getCurrentUser();
+        SysUser sysUser = sysSession.getCurrentEntity().getSysUser();
         return new SimpleAuthenticationInfo(sysUser,sysUser.getPassword(),getName());
     }
 }

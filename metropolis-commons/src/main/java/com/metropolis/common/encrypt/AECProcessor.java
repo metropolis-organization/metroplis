@@ -32,8 +32,8 @@ public class AECProcessor {
 
     private static HessianRedisSerializer serializer = new HessianRedisSerializer();
 
-    public static String serialize2String(Object o){ return Base64.getEncoder().encodeToString(serialize(o)); }
-    public static Object string2Deserialize(String s){ return deserialize(Base64.getDecoder().decode(s)); }
+    public static String serialize2String(Object o){ return Base64.getMimeEncoder().encodeToString(serialize(o)); }
+    public static Object string2Deserialize(String s){ return deserialize(Base64.getMimeDecoder().decode(s)); }
     public static byte[] serialize(Object o){ return serializer.serialize(o); }
     public static Object deserialize(byte[] bytes){return serializer.deserialize(bytes);}
 
@@ -194,7 +194,7 @@ public class AECProcessor {
     public static String token(TokenTime unit,int value) throws IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException {
         StringBuilder result = new StringBuilder(String.valueOf(System.currentTimeMillis()));
         result.append(unit.timestamp(value));
-        return Base64.getEncoder().encodeToString(encrypt(result.toString().getBytes(),TIME_KEY));
+        return Base64.getMimeEncoder().encodeToString(encrypt(result.toString().getBytes(),TIME_KEY));
     }
 
     /**
@@ -213,7 +213,7 @@ public class AECProcessor {
     public static boolean checkToken(String token){
         TimeDto dto=parseToken(token);
         if(Objects.isNull(dto)){return false;}
-        return dto.getCurrDate().after(dto.getTokenDate());
+        return dto.getCurrDate().before(dto.getTokenDate());
     }
 
     private static TimeDto parseToken(String token){
