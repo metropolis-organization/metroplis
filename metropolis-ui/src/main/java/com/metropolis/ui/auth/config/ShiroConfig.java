@@ -9,6 +9,7 @@ import com.metropolis.ui.auth.listener.ShiroSessionListenerAdapter;
 import com.metropolis.ui.auth.properties.ShiroProperties;
 import com.metropolis.ui.auth.redis.RedisManager;
 import com.metropolis.ui.auth.session.RedisSessionDao;
+import com.metropolis.ui.properties.SsoProperties;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.SessionListener;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
@@ -43,14 +44,14 @@ public class ShiroConfig {
 
     @Bean
     public SecurityManager securityManager(SsoRealm ssoRealm, RedisSessionDao redisSessionDao,
-                                           RedisCacheManager redisCacheManager){
+                                           RedisCacheManager redisCacheManager, SsoProperties ssoProperties,RedisManager redisManager){
 
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
 
         //设置Realm
         securityManager.setRealm(ssoRealm);
         //设置session 管理器
-        securityManager.setSessionManager(sessionManager(redisSessionDao));
+        securityManager.setSessionManager(sessionManager(redisSessionDao,ssoProperties));
         // 设置缓存管理器
         securityManager.setCacheManager(redisCacheManager);
 
@@ -79,13 +80,13 @@ public class ShiroConfig {
         return authorizationAttributeSourceAdvisor;
     }
 
-    public DefaultWebSessionManager sessionManager(RedisSessionDao redisSessionDao){
+    public DefaultWebSessionManager sessionManager(RedisSessionDao redisSessionDao,SsoProperties ssoProperties){
 
         DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
         List<SessionListener> listeners = new ArrayList<>();
         //增加会话监听
-        listeners.add(new ShiroSessionListener());
-        listeners.add(new ShiroSessionListenerAdapter());
+        listeners.add(new ShiroSessionListener(ssoProperties));
+//        listeners.add(new ShiroSessionListenerAdapter(ssoProperties,redisManager));
         //会话超时时间配置
         sessionManager.setGlobalSessionTimeout(shiroProperties.getSessionTimeout()*1000);
         //设置监听器

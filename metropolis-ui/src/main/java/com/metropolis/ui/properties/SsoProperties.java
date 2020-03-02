@@ -16,4 +16,6 @@ import org.springframework.context.annotation.PropertySource;
 public class SsoProperties {
     private String serviceUrl;
     private String validateTokenUrl;
+    private String serviceLogout;
+    private String ip;
 }

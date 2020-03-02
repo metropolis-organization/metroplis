@@ -17,7 +17,7 @@ import java.util.Objects;
  * cookie 工具
  */
 public class Cookies {
-    private static final String PATH = "/";
+    private static final String PATH = "/shiroCookies";
     public static void addCookie(String name, String value, HttpServletResponse response){
         Cookie cookie = new Cookie(name, value);
         cookie.setPath(PATH);

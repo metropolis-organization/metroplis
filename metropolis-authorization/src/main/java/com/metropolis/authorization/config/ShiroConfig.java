@@ -20,10 +20,12 @@ import org.apache.shiro.web.servlet.SimpleCookie;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.Base64Utils;
+import org.springframework.web.filter.DelegatingFilterProxy;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -87,6 +89,16 @@ public class ShiroConfig {
         return authorizationAttributeSourceAdvisor;
     }
 
+    @Bean
+    public FilterRegistrationBean delegatingFilterProxy(){
+        FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
+        DelegatingFilterProxy proxy = new DelegatingFilterProxy();
+        proxy.setTargetFilterLifecycle(true);
+        proxy.setTargetBeanName("shiroFilter");
+        filterRegistrationBean.setFilter(proxy);
+        return filterRegistrationBean;
+    }
+
     public DefaultWebSessionManager sessionManager(RedisSessionDao redisSessionDao){
 
         DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
@@ -105,7 +117,7 @@ public class ShiroConfig {
         return sessionManager;
     }
 
-    @Bean
+    @Bean("shiroFilter")
     public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager){
 
          ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();

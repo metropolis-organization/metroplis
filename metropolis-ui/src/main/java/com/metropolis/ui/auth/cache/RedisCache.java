@@ -20,10 +20,10 @@ import java.util.Set;
 public class RedisCache<K,V> implements Cache<K,V> {
 
     private RedisManager redisManager;
-
+    public static final String CACHE_PREFIX = "shiro:cache:";
     private static final String CACHE_TIMEOUT_NA = "N/A";
     private static final String OBJECT_ID_FILED = "id";
-    private static final String CACHE_PREFIX = "shiro:cache:";
+
     private boolean nonTimeout = false;
     private long cacheTimeout = 604800;
 

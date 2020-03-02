@@ -3,6 +3,7 @@ package com.metropolis.authorization.cache;
 import com.metropolis.authorization.dal.entitys.SysUser;
 import com.metropolis.authorization.properties.ShiroProperties;
 import com.metropolis.authorization.redis.RedisManager;
+import com.metropolis.common.web.dto.SysUserDto;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
@@ -47,6 +48,8 @@ public class RedisCache<K,V> implements Cache<K,V> {
             return CACHE_PREFIX+getPrimaryPrincipal((PrincipalCollection) k);
         }else if(k instanceof SysUser){
             return CACHE_PREFIX+((SysUser) k).getId();
+        }else if(k instanceof SysUserDto){
+            return CACHE_PREFIX+((SysUserDto) k).getId();
         }else{
             //对象的其他处理
         }

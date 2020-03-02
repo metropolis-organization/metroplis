@@ -31,6 +31,7 @@ public class ShiroController {
     }
 
     protected void login(AuthenticationToken token){ getSubject().login(token); }
+    protected void logout(){getSubject().logout();}
 
     protected UsernamePasswordToken getToken(SysUser user,boolean rememberMe){
         return new UsernamePasswordToken(user.getUsername(),user.getPassword(),rememberMe);

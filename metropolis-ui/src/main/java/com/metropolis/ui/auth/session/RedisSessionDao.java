@@ -22,7 +22,7 @@ import java.util.Set;
  */
 public class RedisSessionDao extends AbstractSessionDAO {
 
-    private static final String REDIS_SESSION_PREFIX = "shiro:session:";
+    public static final String REDIS_SESSION_PREFIX = "shiro:session:";
 
     private RedisManager redisManager;
     private ShiroProperties shiroProperties;

@@ -4,6 +4,7 @@ import com.metropolis.authorization.dal.entitys.SysUser;
 import com.metropolis.authorization.properties.ValidateCodeProperties;
 import com.metropolis.authorization.service.ISysUserService;
 import com.metropolis.authorization.validate.ValidateCodeService;
+import com.metropolis.common.constants.SysCodeConstants;
 import com.metropolis.common.encrypt.AECProcessor;
 import com.metropolis.common.encrypt.TokenTime;
 import com.metropolis.common.entity.Response;
@@ -57,7 +58,7 @@ public class LoginController extends ShiroController{
             //颁发token进参数和cookie
             SysUserDto sysUser=super.getCurrentUser();
             sendAuth(successUrl,sysUser);
-            response.sendRedirect(successUrl);
+            return new Response(SysCodeConstants.SUCCESS.getCode(),successUrl);
         }
         return Response.OK;
     }
@@ -69,14 +70,6 @@ public class LoginController extends ShiroController{
         HttpClients.doPost(url,map);
     }
 
-    private String getSuccessUrl(String url,SysUser sysUser) throws Exception{
-        StringBuilder stringBuilder = new StringBuilder(url);
-        stringBuilder.append(SsoConstant.U).append("")
-                .append(SsoConstant.AND);
-        // 默认60 秒后超时
-        stringBuilder.append(SsoConstant.SHIRO_TOKEN).append(SsoConstant.EQUALS).append(AECProcessor.token(TokenTime.HOUR,1));
-        return stringBuilder.toString();
-    }
 
 
     @PostMapping("validateToken")
@@ -96,6 +89,9 @@ public class LoginController extends ShiroController{
     public void captcha(HttpServletRequest request, HttpServletResponse response) throws IOException {
         validateCodeService.generateCode(request, response);
     }
+
+    @GetMapping("logout")
+    public void logout(){super.logout();}
 
     @PostMapping("regist")
     public Response regist(SysUser user){
