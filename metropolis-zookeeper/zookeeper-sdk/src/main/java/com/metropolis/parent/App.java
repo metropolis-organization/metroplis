@@ -1,4 +1,4 @@
-package com.metropolis.user;
+package com.metropolis.parent;
 
 /**
  * Hello world!

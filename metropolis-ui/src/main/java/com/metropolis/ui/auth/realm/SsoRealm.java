@@ -4,7 +4,7 @@ import com.metropolis.common.web.dto.SysUserDto;
 import com.metropolis.ui.auth.cache.RedisCache;
 import com.metropolis.ui.auth.entity.SysUser;
 import com.metropolis.ui.auth.redis.RedisManager;
-import com.metropolis.ui.sys.SysSession;
+import com.metropolis.ui.auth.sys.SysSession;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -24,7 +24,6 @@ import java.util.Objects;
  * @date 2020/2/27 21:11
  * 此域将不再做操作，只是通过shiro的验证。
  */
-@Component
 public class SsoRealm extends AuthorizingRealm {
 
     @Autowired

@@ -1,6 +1,5 @@
-package com.metropolis.ui.sys;
+package com.metropolis.sso.auth.sys;
 
-import com.metropolis.ui.auth.entity.SysUser;
 import org.springframework.stereotype.Component;
 
 /**

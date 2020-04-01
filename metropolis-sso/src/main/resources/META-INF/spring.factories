@@ -1,0 +1,11 @@
+# 这里的key同样可以自定义 初始化顺序也很重要
+
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.metropolis.sso.auth.config.ShiroConfig,\
+   com.metropolis.sso.auth.config.RedisConfig,\
+  com.metropolis.sso.auth.properties.ShiroProperties,\
+  com.metropolis.sso.auth.properties.SsoProperties,\
+  com.metropolis.sso.auth.realm.SsoRealm,\
+  com.metropolis.sso.auth.sys.SysSession,\
+  com.metropolis.sso.auth.sso.filter.SsoFilter,\
+  com.metropolis.sso.auth.redis.RedisManager

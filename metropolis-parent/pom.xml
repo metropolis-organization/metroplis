@@ -15,6 +15,8 @@
     <module>../metropolis-commons</module>
     <module>../metropolis-ui</module>
     <module>../metropolis-authorization</module>
+    <module>../metropolis-sso</module>
+    <module>../metropolis-zookeeper</module>
 
     <module>../user-service</module>
 
@@ -26,18 +28,25 @@
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
 
+    <!--服务api start-->
+    <user-api.version>1.0-SNAPSHOT</user-api.version>
+    <!--服务api end-->
+
     <mysql-connector.version>8.0.19</mysql-connector.version>
     <mybatis-plus.version>3.2.0</mybatis-plus.version>
     <druid.version>1.1.19</druid.version>
     <fastjson.version>1.2.62</fastjson.version>
     <hessian.version>4.0.38</hessian.version>
     <easy-captcha.version>1.6.2</easy-captcha.version>
+    <curator-framework.verison>4.0.0</curator-framework.verison>
 
     <!--<jedis.version>2.9.0</jedis.version>-->
     <httpclient.veriosn>4.5.2</httpclient.veriosn>
     <thymeleaf-shiro.version>2.0.0</thymeleaf-shiro.version>
     <spring-shiro.veriosn>1.4.2</spring-shiro.veriosn>
     <spring-redis.version>2.2.1.RELEASE</spring-redis.version>
+
+    <spring-dubbo.version>2.7.3</spring-dubbo.version>
 
     <lombok.version>1.18.10</lombok.version>
 
@@ -56,7 +65,30 @@
   <dependencyManagement>
     <dependencies>
 
+
+      <!--服务api-->
+
       <dependency>
+        <groupId>com.metropolis.user</groupId>
+        <artifactId>user-api</artifactId>
+        <version>${user-api.version}</version>
+      </dependency>
+      <!--服务api end-->
+
+
+      <dependency>
+        <groupId>org.apache.dubbo</groupId>
+        <artifactId>dubbo-spring-boot-starter</artifactId>
+        <version>${spring-dubbo.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.dubbo</groupId>
+        <artifactId>dubbo</artifactId>
+        <version>${spring-dubbo.version}</version>
+      </dependency>
+
+     <dependency>
         <groupId>org.projectlombok</groupId>
         <artifactId>lombok</artifactId>
         <version>${lombok.version}</version>
@@ -80,6 +112,19 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-data-redis</artifactId>
         <version>${spring-redis.version}</version>
+      </dependency>
+
+      <!--监听机制-->
+      <dependency>
+        <groupId>org.apache.curator</groupId>
+        <artifactId>curator-recipes</artifactId>
+        <version>${curator-framework.verison}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.curator</groupId>
+        <artifactId>curator-framework</artifactId>
+        <version>${curator-framework.verison}</version>
       </dependency>
 
       <!--<dependency>-->

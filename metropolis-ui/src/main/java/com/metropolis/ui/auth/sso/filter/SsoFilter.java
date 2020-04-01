@@ -1,25 +1,21 @@
 package com.metropolis.ui.auth.sso.filter;
 
 import com.metropolis.common.encrypt.AECProcessor;
-import com.metropolis.common.entity.Response;
 import com.metropolis.common.sso.SsoConstant;
 import com.metropolis.common.string.StringUtils;
 import com.metropolis.common.web.Cookies;
 import com.metropolis.common.web.HttpClients;
-import com.metropolis.common.web.QueryStrings;
 import com.metropolis.common.web.dto.SysUserDto;
 import com.metropolis.ui.auth.entity.SysUser;
 import com.metropolis.ui.auth.listener.ShiroSessionListener;
 import com.metropolis.ui.auth.redis.RedisManager;
-import com.metropolis.ui.auth.session.RedisSessionDao;
 import com.metropolis.ui.properties.SsoProperties;
-import com.metropolis.ui.sys.SysSession;
-import com.metropolis.ui.sys.UserEntity;
+import com.metropolis.ui.auth.sys.SysSession;
+import com.metropolis.ui.auth.sys.UserEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.web.servlet.AdviceFilter;
-import org.apache.shiro.web.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +31,7 @@ import java.util.*;
  * @date 2020/2/27 17:28
  * 单点登录验证
  */
-@Service
+
 @Slf4j
 public class SsoFilter extends AdviceFilter {
 

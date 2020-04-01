@@ -1,6 +1,6 @@
-package com.metropolis.ui.sys;
+package com.metropolis.sso.auth.sys;
 
-import com.metropolis.ui.auth.entity.SysUser;
+import com.metropolis.sso.auth.entity.SysUser;
 import lombok.Data;
 
 /**

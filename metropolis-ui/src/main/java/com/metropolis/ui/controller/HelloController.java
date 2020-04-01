@@ -1,6 +1,9 @@
 package com.metropolis.ui.controller;
 
 
+import com.metropolis.user.IUserService;
+import com.metropolis.user.entity.SysUser;
+import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -12,8 +15,14 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class HelloController {
 
+    @Reference
+    private IUserService userService;
+
     @GetMapping("index")
     public String hello(){
+
+        SysUser sysUser=userService.getUserByName("p");
+        System.out.println(sysUser.getUsername());
         return "index";
     }
 
