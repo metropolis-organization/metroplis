@@ -16,6 +16,7 @@ import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -38,23 +39,24 @@ import java.util.List;
 //@EnableConfigurationProperties()
 public class ShiroConfig {
 
-    @Autowired
-    ShiroProperties shiroProperties;
-
     private static final String ANON = "anon";
     private static final String LOG_OUT = "logout";
     private static final String USER = "user";
 
     @Bean
+    @ConfigurationProperties(prefix = "metropolis.shiro")
+    public ShiroProperties shiroProperties(){ return new ShiroProperties(); }
+
+    @Bean
     public DefaultWebSecurityManager securityManager(SsoRealm ssoRealm, RedisSessionDao redisSessionDao,
-                                                     RedisCacheManager redisCacheManager, SsoProperties ssoProperties, RedisManager redisManager){
+                                                     RedisCacheManager redisCacheManager, SsoProperties ssoProperties, ShiroProperties shiroProperties){
 
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
 
         //设置Realm
         securityManager.setRealm(ssoRealm);
         //设置session 管理器
-        securityManager.setSessionManager(sessionManager(redisSessionDao,ssoProperties));
+        securityManager.setSessionManager(sessionManager(redisSessionDao,ssoProperties,shiroProperties));
         // 设置缓存管理器
         securityManager.setCacheManager(redisCacheManager);
 
@@ -83,7 +85,7 @@ public class ShiroConfig {
         return authorizationAttributeSourceAdvisor;
     }
 
-    public DefaultWebSessionManager sessionManager(RedisSessionDao redisSessionDao,SsoProperties ssoProperties){
+    public DefaultWebSessionManager sessionManager(RedisSessionDao redisSessionDao,SsoProperties ssoProperties,ShiroProperties shiroProperties){
 
         DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
         List<SessionListener> listeners = new ArrayList<>();
@@ -112,7 +114,7 @@ public class ShiroConfig {
     }
 
     @Bean("shiroFilter")
-    public ShiroFilterFactoryBean shiroFilterFactoryBean(DefaultWebSecurityManager securityManager){
+    public ShiroFilterFactoryBean shiroFilterFactoryBean(DefaultWebSecurityManager securityManager,ShiroProperties shiroProperties){
 
          ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         // 设置管理器

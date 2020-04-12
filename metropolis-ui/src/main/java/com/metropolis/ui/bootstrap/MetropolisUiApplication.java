@@ -2,6 +2,7 @@ package com.metropolis.ui.bootstrap;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
@@ -9,6 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @ComponentScan(basePackages = "com.metropolis.ui")
+@EnableConfigurationProperties
 @SpringBootApplication
 public class MetropolisUiApplication {
 

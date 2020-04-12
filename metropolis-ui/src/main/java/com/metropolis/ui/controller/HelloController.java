@@ -15,14 +15,14 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class HelloController {
 
-    @Reference
+    @Reference(check = false)
     private IUserService userService;
 
     @GetMapping("index")
     public String hello(){
 
-        SysUser sysUser=userService.getUserByName("p");
-        System.out.println(sysUser.getUsername());
+//        SysUser sysUser=userService.getUserByName("p");
+//        System.out.println(sysUser.getUsername());
         return "index";
     }
 

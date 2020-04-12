@@ -10,9 +10,6 @@ import org.springframework.context.annotation.PropertySource;
  * @date 2020/2/27 17:19
  */
 @Data
-@SpringBootConfiguration
-@PropertySource(value = {"classpath:properties/sso-config.properties"})
-@ConfigurationProperties(prefix = "sso")
 public class SsoProperties {
     private String serviceUrl;
     private String validateTokenUrl;

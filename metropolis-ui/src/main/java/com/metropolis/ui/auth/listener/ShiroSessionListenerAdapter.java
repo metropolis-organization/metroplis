@@ -1,9 +1,9 @@
 package com.metropolis.ui.auth.listener;
 
 import com.metropolis.common.string.StringUtils;
+import com.metropolis.sso.auth.properties.SsoProperties;
 import com.metropolis.ui.auth.redis.RedisManager;
 import com.metropolis.ui.auth.session.RedisSessionDao;
-import com.metropolis.ui.properties.SsoProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.SessionListenerAdapter;
@@ -23,7 +23,7 @@ public class ShiroSessionListenerAdapter extends SessionListenerAdapter {
     private Set<String> sessionSets = new HashSet();
     private String serviceIp;
     private RedisManager redisManager;
-    public ShiroSessionListenerAdapter(SsoProperties ssoProperties,RedisManager redisManager) {
+    public ShiroSessionListenerAdapter(SsoProperties ssoProperties, RedisManager redisManager) {
        serviceIp = ssoProperties.getIp();
        this.redisManager = redisManager;
     }

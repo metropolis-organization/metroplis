@@ -19,6 +19,7 @@
         <java.version>1.8</java.version>
 
         <metropolis-common.version>1.0-SNAPSHOT</metropolis-common.version>
+        <metropolis-sso.version>0.0.1-SNAPSHOT</metropolis-sso.version>
 
     </properties>
 
@@ -38,7 +39,7 @@
         <dependency>
             <groupId>com.metropolis.sso</groupId>
             <artifactId>metropolis-sso</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${metropolis-sso.version}</version>
         </dependency>
 
         <dependency>

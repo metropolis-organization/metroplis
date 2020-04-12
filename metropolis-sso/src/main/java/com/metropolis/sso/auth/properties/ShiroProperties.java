@@ -10,9 +10,6 @@ import org.springframework.context.annotation.PropertySource;
  * @date 2020/2/16 16:00
  */
 @Data
-@SpringBootConfiguration
-@PropertySource(value = {"classpath:properties/shiro-config.properties"})
-@ConfigurationProperties(prefix = "shiro")
 public class ShiroProperties {
     private String anonUrl;
     private String loginUrl;

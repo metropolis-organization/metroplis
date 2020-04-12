@@ -3,8 +3,7 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.metropolis.sso.auth.config.ShiroConfig,\
    com.metropolis.sso.auth.config.RedisConfig,\
-  com.metropolis.sso.auth.properties.ShiroProperties,\
-  com.metropolis.sso.auth.properties.SsoProperties,\
+  com.metropolis.sso.auth.config.SsoConfig,\
   com.metropolis.sso.auth.realm.SsoRealm,\
   com.metropolis.sso.auth.sys.SysSession,\
   com.metropolis.sso.auth.sso.filter.SsoFilter,\

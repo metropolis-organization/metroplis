@@ -7,6 +7,30 @@ dubbo:
    application:
      name: ui-application
    registry:
-     address: zookeeper://zookeeper.metropolis.com:2181?backup=zookeeper1.metropolis.com:2182,zookeeper2.metropolis.com:2181
+     address: zookeeper://zookeeper.metropolis.com:2181
+     group: dubbo-dev
+   metadata-report:
+     address: zookeeper://zookeeper.metropolis.com:2181
+     retry-times: 30
+     cycle-report: false
+     group: dubbo-dev
    scan:
      base-packages: com.metropolis.ui.controller
+
+metropolis:
+  sso:
+    service-url: http://localhost:8086/login?successUrl=http://localhost:8087/index
+    service-logout:  http://localhost:8086/logout
+    ip: 127.0.0.1
+    validate-token-url: http://localhost:8086/validateToken
+    token-cookie-timeout: 60
+  shiro:
+    cache-timeout: N/A
+    cookie-timeout: 604800
+    anon-url: /layui/**,/metropolis/**,/regist,/captcha,/logout
+    login-url: /login
+    logout-url: /logoutsso
+    success-url: /index
+    session-encrypt-key: shiro_cookie_key
+    session-timeout: 3600
+    unauthorized-url: /unauthorized
