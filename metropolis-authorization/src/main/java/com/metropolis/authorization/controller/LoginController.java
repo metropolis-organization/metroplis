@@ -2,7 +2,9 @@ package com.metropolis.authorization.controller;
 
 import com.metropolis.authorization.dal.entitys.SysUser;
 import com.metropolis.authorization.properties.ValidateCodeProperties;
+import com.metropolis.authorization.redis.RedisManager;
 import com.metropolis.authorization.service.ISysUserService;
+import com.metropolis.authorization.session.RedisSessionDao;
 import com.metropolis.authorization.validate.ValidateCodeService;
 import com.metropolis.common.constants.SysCodeConstants;
 import com.metropolis.common.encrypt.AECProcessor;
@@ -14,6 +16,7 @@ import com.metropolis.common.web.HttpClients;
 import com.metropolis.common.web.QueryStrings;
 import com.metropolis.common.web.dto.SysUserDto;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,9 +27,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Pop
@@ -40,19 +45,17 @@ public class LoginController extends ShiroController{
     private ISysUserService userService;
     @Autowired
     private ValidateCodeService validateCodeService;
-
-    private String param = "?name=";
+    @Autowired
+    private RedisManager redisManager;
 
     @PostMapping("login")
-    public Response login(SysUser user,boolean rememberMe,String verifyCode,
-                          HttpServletRequest request,HttpServletResponse response) throws Exception {
+    public Response login(SysUser user, boolean rememberMe, String verifyCode,
+                          HttpServletRequest request, HttpSession session) throws Exception {
 
         validateCodeService.checkCode(request,verifyCode);
         //授权
         super.login(super.getToken(user,rememberMe));
-
         //取出登陆成功后跳转的位置。
-
         String successUrl = request.getParameter(SsoConstant.SUCCESS_URL);
         if(StringUtils.nonEmpty(successUrl)){
             //颁发token进参数和cookie
@@ -60,7 +63,16 @@ public class LoginController extends ShiroController{
             sendAuth(successUrl,sysUser);
             return new Response(SysCodeConstants.SUCCESS.getCode(),successUrl);
         }
+        //判断是哪个模块的session,并删除
+        checkSession(request,session);
         return Response.OK;
+    }
+
+    private void checkSession(HttpServletRequest request,HttpSession session) {
+        String group = request.getParameter("group");
+        if(StringUtils.isEmpty(group)){ throw new AuthenticationException(" 未知的模块。"); }
+        //将模块请求认证的session删除
+        redisManager.del(RedisSessionDao.REDIS_SESSION_PREFIX+session.getId());
     }
 
     private void sendAuth(String url,SysUserDto sysUser) throws Exception{
@@ -91,7 +103,9 @@ public class LoginController extends ShiroController{
     }
 
     @GetMapping("logout")
-    public void logout(){super.logout();}
+    public void logout(){
+        super.logout();
+    }
 
     @PostMapping("regist")
     public Response regist(SysUser user){

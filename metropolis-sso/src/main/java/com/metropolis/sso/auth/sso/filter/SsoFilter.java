@@ -1,6 +1,7 @@
 package com.metropolis.sso.auth.sso.filter;
 
 import com.metropolis.common.encrypt.AECProcessor;
+import com.metropolis.common.shiro.Shiros;
 import com.metropolis.common.sso.SsoConstant;
 import com.metropolis.common.string.StringUtils;
 import com.metropolis.common.web.Cookies;
@@ -10,6 +11,7 @@ import com.metropolis.sso.auth.entity.SysUser;
 import com.metropolis.sso.auth.listener.ShiroSessionListener;
 import com.metropolis.sso.auth.properties.SsoProperties;
 import com.metropolis.sso.auth.redis.RedisManager;
+import com.metropolis.sso.auth.session.RedisSessionManager;
 import com.metropolis.sso.auth.sys.SysSession;
 import com.metropolis.sso.auth.sys.UserEntity;
 import lombok.extern.slf4j.Slf4j;
@@ -42,20 +44,20 @@ public class SsoFilter extends AdviceFilter {
     @Autowired
     private SysSession sysSession;
     @Autowired
-    private RedisManager redisManager;
+    private RedisSessionManager redisSessionManager;
 
     @Override
     protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {
         HttpServletRequest servletRequest = (HttpServletRequest) request;
         HttpServletResponse servletResponse = (HttpServletResponse) response;
         String token= servletRequest.getParameter(SsoConstant.SHIRO_TOKEN);
-        String serviceUrl = ssoProperties.getServiceUrl();
+        String serviceUrl = getServiceUrl();
         // 如果是退出命令
         String uri = servletRequest.getRequestURI();
         if(SecurityUtils.getSubject().isAuthenticated()){
             if(SsoConstant.LOGOUT.equals(uri)){
                 SecurityUtils.getSubject().logout();//本系统的登出操作
-                clearServiceSession();
+                clearServiceSession();//清除所有有关联的session
                 servletResponse.sendRedirect(serviceUrl);//弹回登录界面
                 return false;
             }
@@ -91,10 +93,9 @@ public class SsoFilter extends AdviceFilter {
                     // 进行登录操作
                     // 取出个人信息
                     UserEntity e =sysSession.getCurrentEntity();
-                    SysUser sysUser = copy((SysUserDto)AECProcessor.string2Deserialize(e.getSerializeCode()));
-                    e.setSysUser(sysUser);
+                    SysUserDto sysUserDto = (SysUserDto)AECProcessor.string2Deserialize(e.getSerializeCode());
                     sysSession.setCurrentEntity(e);
-                    SecurityUtils.getSubject().login(new UsernamePasswordToken(sysUser.getUsername(),sysUser.getPassword()));//这里只为了触发realm的操作
+                    Shiros.login(Shiros.getToken(sysUserDto));//这里只为了触发realm的操作
                     // 放行，并将token缓存起来。
                     Cookies.addCookie(SsoConstant.SHIRO_COOKIE_TOKEN,token,servletResponse);
                     return super.preHandle(request, response);
@@ -105,23 +106,17 @@ public class SsoFilter extends AdviceFilter {
         return false;
     }
 
+    private String getServiceUrl(){
+        return ssoProperties.getServiceUrl()+SsoConstant.GROUP_KEY+ssoProperties.getGroup();
+    }
+
     private void clearServiceSession(){
-        redisManager.del(ShiroSessionListener.sessionSets.toArray(new String[]{}));
+//        redisManager.del(ShiroSessionListener.sessionSets.toArray(new String[]{}));
+        SysUserDto user= Shiros.getCurrentUser();
+        redisSessionManager.delSession(user,ssoProperties.getGroup());
         log.info(" 删除验证中心会话。");
     }
 
-    private SysUser copy(SysUserDto dto){
-        SysUser sysUser = new SysUser();
-        sysUser.setId(dto.getId());
-        sysUser.setCreatetime(dto.getCreatetime());
-        sysUser.setCredentialsSalt(dto.getCredentialsSalt());
-        sysUser.setIsDelete(dto.getIsDelete());
-        sysUser.setLastLoginTime(dto.getLastLoginTime());
-        sysUser.setPassword(dto.getPassword());
-        sysUser.setUsername(dto.getUsername());
-        sysUser.setLocked(dto.getLocked());
-        return sysUser;
-    }
 
     @Override
     protected void postHandle(ServletRequest request, ServletResponse response) throws Exception {

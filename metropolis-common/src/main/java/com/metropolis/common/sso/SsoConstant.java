@@ -17,7 +17,7 @@ public class SsoConstant {
     public static final String EQUALS = "=";
     public static final String U = "?u=";
     public static final String U_KEY = "u";
-
+    public static final String GROUP_KEY="&group=";
     public static final String AND = "&";
 
 }

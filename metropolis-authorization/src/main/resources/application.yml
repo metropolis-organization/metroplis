@@ -10,6 +10,7 @@ spring:
     host: redis.metropolis.com
     database: 0
     port: 6379
+    password: 123
 mybatis-plus:
   mapper-locations: classpath*:com/metropolis/authorization/dal/persistence/*Mapper.xml"
   type-aliases-package: com.metropolis.authorization.dal.entitys

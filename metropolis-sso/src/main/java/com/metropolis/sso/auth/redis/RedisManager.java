@@ -1,6 +1,10 @@
 package com.metropolis.sso.auth.redis;
 
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
+import org.springframework.data.redis.core.script.RedisScript;
+import org.springframework.scripting.support.ResourceScriptSource;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
@@ -521,5 +525,35 @@ public class RedisManager {
             e.printStackTrace();
             return 0;
         }
+    }
+
+    public  List<String> setKeys(String... keys) {
+        return Arrays.asList(keys);
+    }
+
+    public <T> T execute(RedisScript<T> script,List keys,Object ...args){
+        try{
+            return (T)redisTemplate.execute(script,keys,args);
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    public <T> T execute(Class<T> clazz,String script,List keys,Object ...args){
+        try{
+            return (T)redisTemplate.execute(getScript(clazz,script),keys,args);
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private DefaultRedisScript getScript(Class clazz, String scriptText) {
+        DefaultRedisScript<Boolean> script = new DefaultRedisScript<>();
+        script.setResultType(clazz);
+        script.setScriptText(scriptText);
+        return script;
     }
 }

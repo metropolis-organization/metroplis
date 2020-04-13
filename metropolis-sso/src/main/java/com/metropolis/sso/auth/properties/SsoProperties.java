@@ -15,4 +15,5 @@ public class SsoProperties {
     private String validateTokenUrl;
     private String serviceLogout;
     private String ip;
+    private String group;
 }

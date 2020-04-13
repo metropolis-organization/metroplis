@@ -7,4 +7,5 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.metropolis.sso.auth.realm.SsoRealm,\
   com.metropolis.sso.auth.sys.SysSession,\
   com.metropolis.sso.auth.sso.filter.SsoFilter,\
-  com.metropolis.sso.auth.redis.RedisManager
+  com.metropolis.sso.auth.redis.RedisManager,\
+  com.metropolis.sso.auth.session.RedisSessionManager

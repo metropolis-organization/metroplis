@@ -7,10 +7,13 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.scripting.support.ResourceScriptSource;
 
 /**
  * @author Pop
@@ -36,5 +39,17 @@ public class RedisConfig {
         return redisTemplate;
     }
 
+    @Bean(name = "delSessionScript")
+    public DefaultRedisScript<Boolean> delSessionScript() {
+        return getScript(Boolean.class, "lua/session/delSession.lua");
+    }
+
+
+    private DefaultRedisScript getScript(Class clazz, String url) {
+        DefaultRedisScript<Boolean> script = new DefaultRedisScript<>();
+        script.setResultType(clazz);
+        script.setScriptSource(new ResourceScriptSource(new ClassPathResource(url)));
+        return script;
+    }
 
 }

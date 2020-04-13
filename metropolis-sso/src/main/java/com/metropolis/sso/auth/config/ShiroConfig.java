@@ -9,6 +9,7 @@ import com.metropolis.sso.auth.properties.SsoProperties;
 import com.metropolis.sso.auth.realm.SsoRealm;
 import com.metropolis.sso.auth.redis.RedisManager;
 import com.metropolis.sso.auth.session.RedisSessionDao;
+import com.metropolis.sso.auth.session.RedisSessionManager;
 import org.apache.shiro.session.SessionListener;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
@@ -49,14 +50,15 @@ public class ShiroConfig {
 
     @Bean
     public DefaultWebSecurityManager securityManager(SsoRealm ssoRealm, RedisSessionDao redisSessionDao,
-                                                     RedisCacheManager redisCacheManager, SsoProperties ssoProperties, ShiroProperties shiroProperties){
+                                                     RedisCacheManager redisCacheManager, SsoProperties ssoProperties,
+                                                     ShiroProperties shiroProperties, RedisSessionManager redisSessionManager){
 
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
 
         //设置Realm
         securityManager.setRealm(ssoRealm);
         //设置session 管理器
-        securityManager.setSessionManager(sessionManager(redisSessionDao,ssoProperties,shiroProperties));
+        securityManager.setSessionManager(sessionManager(redisSessionDao,ssoProperties,shiroProperties,redisSessionManager));
         // 设置缓存管理器
         securityManager.setCacheManager(redisCacheManager);
 
@@ -85,12 +87,13 @@ public class ShiroConfig {
         return authorizationAttributeSourceAdvisor;
     }
 
-    public DefaultWebSessionManager sessionManager(RedisSessionDao redisSessionDao,SsoProperties ssoProperties,ShiroProperties shiroProperties){
+    public DefaultWebSessionManager sessionManager(RedisSessionDao redisSessionDao,SsoProperties ssoProperties,
+                                                   ShiroProperties shiroProperties,RedisSessionManager redisSessionManager){
 
         DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
         List<SessionListener> listeners = new ArrayList<>();
         //增加会话监听
-        listeners.add(new ShiroSessionListener(ssoProperties));
+        listeners.add(new ShiroSessionListener(ssoProperties,redisSessionManager));
 //        listeners.add(new ShiroSessionListenerAdapter(ssoProperties,redisManager));
         //会话超时时间配置
         sessionManager.setGlobalSessionTimeout(shiroProperties.getSessionTimeout()*1000);

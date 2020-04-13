@@ -1,2 +1,26 @@
 server:
   port: 8089
+
+metropolis:
+  sso:
+    service-url: http://localhost:8086/login?successUrl=http://localhost:8089/index
+    service-logout:  http://localhost:8086/logout
+    ip: 127.0.0.1
+    validate-token-url: http://localhost:8086/validateToken
+    token-cookie-timeout: 60
+    group: dashborad
+  shiro:
+    cache-timeout: N/A
+    cookie-timeout: 604800
+    anon-url: /layui/**,/metropolis/**,/regist,/captcha,/logout
+    login-url: /login
+    logout-url: /logoutsso
+    success-url: /index
+    session-encrypt-key: shiro_cookie_key
+    session-timeout: 3600
+    unauthorized-url: /unauthorized
+spring:
+  redis:
+    password: 123
+    database: 0
+    host: redis.metropolis.com

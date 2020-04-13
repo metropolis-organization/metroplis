@@ -1,5 +1,6 @@
 package com.metropolis.sso.auth.sys;
 
+import com.metropolis.sso.auth.entity.SysUser;
 import org.springframework.stereotype.Component;
 
 /**
@@ -14,6 +15,7 @@ public class SysSession {
     private ThreadLocal<UserEntity> userThreadLocal = new ThreadLocal<>();
 
     public UserEntity getCurrentEntity(){ return userThreadLocal.get(); }
+    public SysUser getCurrentUser(){return getCurrentEntity().getSysUser();}
     public void setCurrentEntity(UserEntity entity){userThreadLocal.set(entity);}
     public void clear(){ userThreadLocal.remove(); }
 }

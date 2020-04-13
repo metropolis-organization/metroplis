@@ -7,3 +7,4 @@ spring:
     host: redis.metropolis.com
     database: 0
     port: 6379
+    password: 123

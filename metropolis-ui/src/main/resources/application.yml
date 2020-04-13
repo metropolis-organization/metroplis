@@ -24,6 +24,7 @@ metropolis:
     ip: 127.0.0.1
     validate-token-url: http://localhost:8086/validateToken
     token-cookie-timeout: 60
+    group: ui
   shiro:
     cache-timeout: N/A
     cookie-timeout: 604800
