@@ -531,6 +531,15 @@ public class RedisManager {
         return Arrays.asList(keys);
     }
 
+    public <T> T execute(RedisScript<T> script,List keys){
+        try{
+            return (T)redisTemplate.execute(script,keys);
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public <T> T execute(RedisScript<T> script,List keys,Object ...args){
         try{
             return (T)redisTemplate.execute(script,keys,args);
@@ -539,7 +548,6 @@ public class RedisManager {
             return null;
         }
     }
-
 
     public <T> T execute(Class<T> clazz,String script,List keys,Object ...args){
         try{

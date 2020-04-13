@@ -45,8 +45,6 @@ public class LoginController extends ShiroController{
     private ISysUserService userService;
     @Autowired
     private ValidateCodeService validateCodeService;
-    @Autowired
-    private RedisManager redisManager;
 
     @PostMapping("login")
     public Response login(SysUser user, boolean rememberMe, String verifyCode,
@@ -63,16 +61,7 @@ public class LoginController extends ShiroController{
             sendAuth(successUrl,sysUser);
             return new Response(SysCodeConstants.SUCCESS.getCode(),successUrl);
         }
-        //判断是哪个模块的session,并删除
-        checkSession(request,session);
         return Response.OK;
-    }
-
-    private void checkSession(HttpServletRequest request,HttpSession session) {
-        String group = request.getParameter("group");
-        if(StringUtils.isEmpty(group)){ throw new AuthenticationException(" 未知的模块。"); }
-        //将模块请求认证的session删除
-        redisManager.del(RedisSessionDao.REDIS_SESSION_PREFIX+session.getId());
     }
 
     private void sendAuth(String url,SysUserDto sysUser) throws Exception{

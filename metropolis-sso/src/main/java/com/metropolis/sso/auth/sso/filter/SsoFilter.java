@@ -55,9 +55,14 @@ public class SsoFilter extends AdviceFilter {
         // 如果是退出命令
         String uri = servletRequest.getRequestURI();
         if(SecurityUtils.getSubject().isAuthenticated()){
-            if(SsoConstant.LOGOUT.equals(uri)){
-                SecurityUtils.getSubject().logout();//本系统的登出操作
+             if(SsoConstant.INDEX.equals(uri)){
+                redisSessionManager.
+                        addSession(Shiros.getCurrentUser(),
+                                ssoProperties.getGroup(),servletRequest.getSession().getId());
+                return true;
+            }else if(SsoConstant.LOGOUT.equals(uri)){
                 clearServiceSession();//清除所有有关联的session
+                Shiros.logout();//本系统的登出操作
                 servletResponse.sendRedirect(serviceUrl);//弹回登录界面
                 return false;
             }
@@ -107,7 +112,7 @@ public class SsoFilter extends AdviceFilter {
     }
 
     private String getServiceUrl(){
-        return ssoProperties.getServiceUrl()+SsoConstant.GROUP_KEY+ssoProperties.getGroup();
+        return ssoProperties.getServiceUrl();
     }
 
     private void clearServiceSession(){

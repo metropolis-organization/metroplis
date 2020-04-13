@@ -29,9 +29,9 @@ public class ShiroSessionListener implements SessionListener {
     @Override
     public void onStart(Session session) {
         if(StringUtils.equals(ssoProperties.getIp(),session.getHost())){
-            redisSessionManager.
-                    addSession(Shiros.getCurrentUser(),
-                            ssoProperties.getGroup(),session.getId()+"");
+//            redisSessionManager.
+//                    addSession(Shiros.getCurrentUser(),
+//                            ssoProperties.getGroup(),session.getId()+"");
             log.info(" 来自验证中心的会话已添加。");
         }else{
 
