@@ -15,6 +15,7 @@ import com.metropolis.sso.auth.session.RedisSessionManager;
 import com.metropolis.sso.auth.sys.SysSession;
 import com.metropolis.sso.auth.sys.UserEntity;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.HttpHeaders;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.web.servlet.AdviceFilter;
@@ -54,15 +55,16 @@ public class SsoFilter extends AdviceFilter {
         String serviceUrl = getServiceUrl();
         // 如果是退出命令
         String uri = servletRequest.getRequestURI();
+        //判断来源是否是验证中心的请求
         if(SecurityUtils.getSubject().isAuthenticated()){
              if(SsoConstant.INDEX.equals(uri)){
-                redisSessionManager.
-                        addSession(Shiros.getCurrentUser(),
-                                ssoProperties.getGroup(),servletRequest.getSession().getId());
+//                redisSessionManager.
+//                        addSession(Shiros.getCurrentUser(),
+//                                ssoProperties.getGroup(),servletRequest.getSession().getId());
                 return true;
             }else if(SsoConstant.LOGOUT.equals(uri)){
-                clearServiceSession();//清除所有有关联的session
                 Shiros.logout();//本系统的登出操作
+//                  clearServiceSession();//清除所有有关联的session
                 servletResponse.sendRedirect(serviceUrl);//弹回登录界面
                 return false;
             }
@@ -113,6 +115,13 @@ public class SsoFilter extends AdviceFilter {
 
     private String getServiceUrl(){
         return ssoProperties.getServiceUrl();
+    }
+
+    private boolean checkReferer(HttpServletRequest request,String serviceUrl){
+        String referer = request.getHeader(HttpHeaders.REFERER);
+        if(StringUtils.isEmpty(referer)){return true;}
+        if(StringUtils.equals(serviceUrl,referer)){return false;}
+        return true;
     }
 
     private void clearServiceSession(){

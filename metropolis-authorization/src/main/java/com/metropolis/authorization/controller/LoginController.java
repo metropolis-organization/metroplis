@@ -57,8 +57,9 @@ public class LoginController extends ShiroController{
         String successUrl = request.getParameter(SsoConstant.SUCCESS_URL);
         if(StringUtils.nonEmpty(successUrl)){
             //颁发token进参数和cookie
-            SysUserDto sysUser=super.getCurrentUser();
-            sendAuth(successUrl,sysUser);
+//            SysUserDto sysUser=super.getCurrentUser();
+//            sysUser.setSessionId(session.getId());
+//            sendAuth(successUrl,sysUser);
             return new Response(SysCodeConstants.SUCCESS.getCode(),successUrl);
         }
         return Response.OK;

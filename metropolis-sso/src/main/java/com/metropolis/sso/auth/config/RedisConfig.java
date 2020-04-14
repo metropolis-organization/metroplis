@@ -44,6 +44,11 @@ public class RedisConfig {
         return getScript(Boolean.class, "lua/session/delSession.lua");
     }
 
+    @Bean(name = "addSessionScript")
+    public DefaultRedisScript<Boolean> addSessionScript() {
+        return getScript(Boolean.class, "lua/session/addSession.lua");
+    }
+
 
     private DefaultRedisScript getScript(Class clazz, String url) {
         DefaultRedisScript<Boolean> script = new DefaultRedisScript<>();
