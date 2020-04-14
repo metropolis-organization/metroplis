@@ -1,8 +1,10 @@
 package com.metropolis.service;
 
+import com.metropolis.dal.persistence.SysUserMapper;
 import com.metropolis.user.IUserService;
 import com.metropolis.user.entity.SysUser;
 import org.apache.dubbo.config.annotation.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author Pop
@@ -10,16 +12,17 @@ import org.apache.dubbo.config.annotation.Service;
  */
 @Service
 public class UserServiceImpl implements IUserService {
+
+    @Autowired
+    private SysUserMapper sysUserMapper;
+
     @Override
     public SysUser getUserById(Long id) {
-        return null;
+        return sysUserMapper.getUserById(id);
     }
 
     @Override
     public SysUser getUserByName(String name) {
-        SysUser sysUser = new SysUser();
-        sysUser.setUsername("pop");
-
-        return sysUser;
+        return sysUserMapper.getUserByName(name);
     }
 }
