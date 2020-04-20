@@ -3,7 +3,7 @@
 <mapper namespace="com.metropolis.dal.persistence.SysUserMapper">
 
     <resultMap type="com.metropolis.user.entity.SysUser" id="SysUserMap">
-        <result property="id" column="id" jdbcType="LONG INTEGER"/>
+        <result property="id" column="id" jdbcType="BIGINT"/>
         <result property="username" column="username" jdbcType="VARCHAR"/>
         <result property="password" column="password" jdbcType="VARCHAR"/>
         <result property="salt" column="salt" jdbcType="VARCHAR"/>
@@ -16,7 +16,7 @@
     <!--查询单个-->
     <select id="getUserById" resultMap="SysUserMap" >
         select
-          id, username, password, salt, locked, createtime, last_login_time, is_delete
+          id, username, locked, createtime, last_login_time, is_delete
         from metropolis.sys_user
         where id = #{id}
     </select>

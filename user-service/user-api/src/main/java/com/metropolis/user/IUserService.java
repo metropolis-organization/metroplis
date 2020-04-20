@@ -15,6 +15,8 @@ public interface IUserService  {
 
     SysUser getUserById(long id);
 
+    SysUser getUserById(String id);
+
     SysUser getUserByName(String name);
 
     List<SysUser> query(PageDto pageDto, SysUser user);

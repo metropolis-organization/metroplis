@@ -1,18 +1,31 @@
 
-
 dubbo:
   application:
     name: user-service
   registry:
-    address: zookeeper://zookeeper.metropolis.com:2181?backup=zookeeper1.metropolis.com:2182,zookeeper2.metropolis.com:2181
+    address: zookeeper://zookeeper.metropolis.com:2181
     simplified: true
-    group: dubbo-user-service
+    group: dubbo-dev
   scan:
     base-packages: com.metropolis.service
   metadata-report:
-    address: zookeeper://zookeeper.metropolis.com:2181?backup=zookeeper1.metropolis.com:2182,zookeeper2.metropolis.com:2181
-    group: dubbo-user-service
+    address: zookeeper://zookeeper.metropolis.com:2181
+    group: dubbo-dev
     retry-times: 30
 spring:
   profiles:
     active: dev
+  datasource:
+    url: jdbc:mysql://mysql.metropolis.com:3306/metropolis?useUnicode=true&characterEncoding=utf8&useOldAliasMetadataBehavior=true&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&serverTimezone=UTC
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    initialSize: 2
+    minIdle: 1
+    maxActive: 20
+    maxWait: 60000
+
+mybatis-plus:
+  mapper-locations: classpath*:com/metropolis/dal/persistence/*Mapper.xml
+  type-aliases-package: com.metropolis.user.entity

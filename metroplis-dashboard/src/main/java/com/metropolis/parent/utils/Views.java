@@ -1,4 +1,4 @@
-package com.metropolis.common.web.view;
+package com.metropolis.parent.utils;
 
 import org.springframework.web.servlet.ModelAndView;
 

@@ -8,6 +8,9 @@ import com.metropolis.user.entity.SysUser;
 import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 /**
  * @program: metroplis
  * @description: User 控制层
@@ -22,12 +25,14 @@ public class UserController {
     @Reference(check = false)
     private IUserService userService;
 
+    @GetMapping(path = "user/{id}")
+    public ViewData<SysUser> user(@PathVariable String id){
+        return ViewData.data(ViewData.array(userService.getUserById(id)));
+    }
+
     @GetMapping(path = "list")
     public ViewData<SysUser> list(PageDto pageDto,SysUser sysUser){
-        ViewData<SysUser> data=ViewData.data();
-        data.setData(userService.query(pageDto, sysUser));
-        data.setPage(pageDto);
-        return data;
+        return ViewData.data(userService.query(pageDto, sysUser),pageDto);
     }
 
     @PostMapping(path = "update")

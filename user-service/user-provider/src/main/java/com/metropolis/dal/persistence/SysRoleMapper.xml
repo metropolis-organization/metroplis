@@ -3,7 +3,7 @@
 <mapper namespace="com.metropolis.dal.persistence.SysRoleMapper">
 
     <resultMap type="com.metropolis.user.entity.SysRole" id="SysRoleMap">
-        <result property="id" column="id" jdbcType="LONG INTEGER"/>
+        <result property="id" column="id" jdbcType="BIGINT"/>
         <result property="roleName" column="role_name" jdbcType="VARCHAR"/>
         <result property="roleDescription" column="role_description" jdbcType="VARCHAR"/>
         <result property="available" column="available" jdbcType="BOOLEAN"/>

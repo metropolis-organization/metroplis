@@ -29,6 +29,10 @@ public class UserServiceImpl extends MyBaitsManager<SysUser> implements IUserSer
         return sysUserMapper.getUserById(id);
     }
 
+    public SysUser getUserById(String id){
+        return getUserById(Long.parseLong(id));
+    }
+
     @Transactional(readOnly = true)
     @Override
     public SysUser getUserByName(String name) {
