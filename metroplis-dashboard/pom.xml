@@ -19,9 +19,16 @@
     <properties>
         <metropolis-common.version>1.0-SNAPSHOT</metropolis-common.version>
         <metropolis-sso.version>1.0-SNAPSHOT</metropolis-sso.version>
+        <user-api.version>0.0.1</user-api.version>
     </properties>
 
     <dependencies>
+
+        <dependency>
+            <groupId>com.metropolis.user</groupId>
+            <artifactId>user-api</artifactId>
+            <version>${user-api.version}</version>
+        </dependency>
 
         <!-- 其它模块组件-->
         <dependency>
@@ -43,6 +50,26 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo-spring-boot-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.curator</groupId>
+            <artifactId>curator-framework</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.curator</groupId>
+            <artifactId>curator-recipes</artifactId>
         </dependency>
 
         <dependency>

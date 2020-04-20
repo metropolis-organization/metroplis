@@ -1,16 +1,29 @@
 package com.metropolis.user;
 
+
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.metropolis.common.web.dto.PageDto;
 import com.metropolis.user.entity.SysUser;
+
+import java.util.List;
 
 /**
  * @author Pop
  * @date 2020/3/17 16:58
  */
-public interface IUserService {
+public interface IUserService  {
 
-    SysUser getUserById(Long id);
+    SysUser getUserById(long id);
 
     SysUser getUserByName(String name);
 
+    List<SysUser> query(PageDto pageDto, SysUser user);
 
+    void save(SysUser user);
+
+    void update(SysUser user);
+
+    void delete(long id);
+
+    void batchDelete(long[] ids);
 }

@@ -1,0 +1,3 @@
+mybatis-plus:
+  mapper-locations: classpath*:com/metropolis/dal/persistence/*Mapper.xml"
+  type-aliases-package: com.metropolis.user.entity

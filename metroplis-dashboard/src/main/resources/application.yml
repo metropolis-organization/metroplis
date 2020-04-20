@@ -24,3 +24,17 @@ spring:
     password: 123
     database: 0
     host: redis.metropolis.com
+
+dubbo:
+   application:
+     name: metropolis-dashborad
+   registry:
+     address: zookeeper://zookeeper.metropolis.com:2181
+     group: dubbo-dev
+   metadata-report:
+     address: zookeeper://zookeeper.metropolis.com:2181
+     retry-times: 30
+     cycle-report: false
+     group: dubbo-dev
+   scan:
+     base-packages: com.metropolis.parent.controller

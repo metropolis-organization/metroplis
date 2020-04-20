@@ -28,51 +28,43 @@
         where username = #{name}
     </select>
 
-    <!--查询指定行数据-->
-    <select id="queryAllByLimit" resultMap="SysUserMap">
-        select
-          id, username, password, salt, locked, createtime, last_login_time, is_delete
-        from metropolis.sys_user
-        limit #{offset}, #{limit}
-    </select>
-
     <!--通过实体作为筛选条件查询-->
-    <select id="queryAll" resultMap="SysUserMap">
+    <select id="query" resultMap="SysUserMap">
         select
           id, username, password, salt, locked, createtime, last_login_time, is_delete
         from metropolis.sys_user
         <where>
             <if test="id != null">
-                and id = #{id}
+                and id = #{user.id}
             </if>
             <if test="username != null and username != ''">
-                and username = #{username}
+                and username = #{user.username}
             </if>
             <if test="password != null and password != ''">
-                and password = #{password}
+                and password = #{user.password}
             </if>
             <if test="salt != null and salt != ''">
-                and salt = #{salt}
+                and salt = #{user.salt}
             </if>
             <if test="locked != null">
-                and locked = #{locked}
+                and locked = #{user.locked}
             </if>
             <if test="createtime != null">
-                and createtime = #{createtime}
+                and createtime = #{user.createtime}
             </if>
             <if test="lastLoginTime != null">
-                and last_login_time = #{lastLoginTime}
+                and last_login_time = #{user.lastLoginTime}
             </if>
             <if test="isDelete != null">
-                and is_delete = #{isDelete}
+                and is_delete = #{user.isDelete}
             </if>
         </where>
     </select>
 
     <!--新增所有列-->
-    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+    <insert id="save" keyProperty="id" useGeneratedKeys="true">
         insert into metropolis.sys_user(username, password, salt, locked, createtime, last_login_time, is_delete)
-        values (#{username}, #{password}, #{salt}, #{locked}, #{createtime}, #{lastLoginTime}, #{isDelete})
+        values (#{user.username}, #{user.password}, #{user.salt}, #{user.locked}, #{user.createtime}, #{user.lastLoginTime}, #{user.isDelete})
     </insert>
 
     <!--通过主键修改数据-->
@@ -80,33 +72,42 @@
         update metropolis.sys_user
         <set>
             <if test="username != null and username != ''">
-                username = #{username},
+                username = #{user.username},
             </if>
             <if test="password != null and password != ''">
-                password = #{password},
+                password = #{user.password},
             </if>
             <if test="salt != null and salt != ''">
-                salt = #{salt},
+                salt = #{user.salt},
             </if>
             <if test="locked != null">
-                locked = #{locked},
+                locked = #{user.locked},
             </if>
             <if test="createtime != null">
-                createtime = #{createtime},
+                createtime = #{user.createtime},
             </if>
             <if test="lastLoginTime != null">
-                last_login_time = #{lastLoginTime},
+                last_login_time = #{user.lastLoginTime},
             </if>
             <if test="isDelete != null">
-                is_delete = #{isDelete},
+                is_delete = #{user.isDelete},
             </if>
         </set>
-        where id = #{id}
+        <where>
+            id = #{user.id}
+        </where>
     </update>
 
     <!--通过主键删除-->
-    <delete id="deleteById">
+    <delete id="delete">
         delete from metropolis.sys_user where id = #{id}
+    </delete>
+
+    <delete id="batchDelete">
+        delete from metropolis.sys_user where id in
+        <foreach collection="ids" item="id" index="i" open="(" separator="," close=")">
+            #{id}
+        </foreach>
     </delete>
 
 </mapper>

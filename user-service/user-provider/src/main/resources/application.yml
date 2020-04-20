@@ -1,3 +1,5 @@
+
+
 dubbo:
   application:
     name: user-service
@@ -11,3 +13,6 @@ dubbo:
     address: zookeeper://zookeeper.metropolis.com:2181?backup=zookeeper1.metropolis.com:2182,zookeeper2.metropolis.com:2181
     group: dubbo-user-service
     retry-times: 30
+spring:
+  profiles:
+    active: dev

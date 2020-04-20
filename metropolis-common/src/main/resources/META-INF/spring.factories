@@ -1,0 +1,4 @@
+# 这里的key同样可以自定义 初始化顺序也很重要
+
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=
+
