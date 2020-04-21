@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
+ * 整合一些页面跳转逻辑
+ *
  * @program: metroplis
  * @description:
  * @author: Pop
@@ -20,4 +22,13 @@ public class HelloController extends ShiroController {
         return Views.get("index",Views.parmas("user",super.getCurrentUser()));
     }
 
+    @GetMapping(value = "user")
+    public ModelAndView user(){
+        return Views.get("user/user");
+    }
+
+    @GetMapping(value = "role")
+    public ModelAndView role(){
+        return Views.get("user/role");
+    }
 }

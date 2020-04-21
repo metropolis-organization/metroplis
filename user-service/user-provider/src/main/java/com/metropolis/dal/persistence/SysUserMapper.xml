@@ -8,7 +8,7 @@
         <result property="password" column="password" jdbcType="VARCHAR"/>
         <result property="salt" column="salt" jdbcType="VARCHAR"/>
         <result property="locked" column="locked" jdbcType="BOOLEAN"/>
-        <result property="createtime" column="createtime" jdbcType="TIMESTAMP"/>
+        <result property="createtime" column="create_time" jdbcType="TIMESTAMP"/>
         <result property="lastLoginTime" column="last_login_time" jdbcType="TIMESTAMP"/>
         <result property="isDelete" column="is_delete" jdbcType="BOOLEAN"/>
     </resultMap>
@@ -16,14 +16,14 @@
     <!--查询单个-->
     <select id="getUserById" resultMap="SysUserMap" >
         select
-          id, username, locked, createtime, last_login_time, is_delete
+          id, username, locked, create_time, last_login_time, is_delete
         from metropolis.sys_user
         where id = #{id}
     </select>
 
     <select id="getUserByName" resultMap="SysUserMap">
         select
-          id, username, password, salt, locked, createtime, last_login_time, is_delete
+          id, username, password, salt, locked, create_time, last_login_time, is_delete
         from metropolis.sys_user
         where username = #{name}
     </select>
@@ -31,31 +31,31 @@
     <!--通过实体作为筛选条件查询-->
     <select id="query" resultMap="SysUserMap">
         select
-          id, username, password, salt, locked, createtime, last_login_time, is_delete
-        from metropolis.sys_user
+          id, username, password, salt, locked, create_time, last_login_time, is_delete
+        from sys_user
         <where>
-            <if test="id != null">
+            <if test="user.id != null">
                 and id = #{user.id}
             </if>
-            <if test="username != null and username != ''">
+            <if test="user.username != null and user.username != ''">
                 and username = #{user.username}
             </if>
-            <if test="password != null and password != ''">
+            <if test="user.password != null and user.password != ''">
                 and password = #{user.password}
             </if>
-            <if test="salt != null and salt != ''">
+            <if test="user.salt != null and user.salt != ''">
                 and salt = #{user.salt}
             </if>
-            <if test="locked != null">
+            <if test="user.locked != null">
                 and locked = #{user.locked}
             </if>
-            <if test="createtime != null">
+            <if test="user.createtime != null">
                 and createtime = #{user.createtime}
             </if>
-            <if test="lastLoginTime != null">
+            <if test="user.lastLoginTime != null">
                 and last_login_time = #{user.lastLoginTime}
             </if>
-            <if test="isDelete != null">
+            <if test="user.isDelete != null">
                 and is_delete = #{user.isDelete}
             </if>
         </where>
@@ -63,7 +63,7 @@
 
     <!--新增所有列-->
     <insert id="save" keyProperty="id" useGeneratedKeys="true">
-        insert into metropolis.sys_user(username, password, salt, locked, createtime, last_login_time, is_delete)
+        insert into metropolis.sys_user(username, password, salt, locked, create_time, last_login_time, is_delete)
         values (#{user.username}, #{user.password}, #{user.salt}, #{user.locked}, #{user.createtime}, #{user.lastLoginTime}, #{user.isDelete})
     </insert>
 
@@ -71,30 +71,32 @@
     <update id="update">
         update metropolis.sys_user
         <set>
-            <if test="username != null and username != ''">
+            <if test="user.username != null and user.username != ''">
                 username = #{user.username},
             </if>
-            <if test="password != null and password != ''">
+            <if test="user.password != null and user.password != ''">
                 password = #{user.password},
             </if>
-            <if test="salt != null and salt != ''">
+            <if test="user.salt != null and user.salt != ''">
                 salt = #{user.salt},
             </if>
-            <if test="locked != null">
+            <if test="user.locked != null">
                 locked = #{user.locked},
             </if>
-            <if test="createtime != null">
-                createtime = #{user.createtime},
+            <if test="user.createtime != null">
+                create_time = #{user.createtime},
             </if>
-            <if test="lastLoginTime != null">
+            <if test="user.lastLoginTime != null">
                 last_login_time = #{user.lastLoginTime},
             </if>
-            <if test="isDelete != null">
+            <if test="user.isDelete != null">
                 is_delete = #{user.isDelete},
             </if>
         </set>
         <where>
-            id = #{user.id}
+            <if test="user.id != null">
+              id = #{user.id}
+            </if>
         </where>
     </update>
 

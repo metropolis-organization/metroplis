@@ -19,23 +19,24 @@ import java.util.stream.Collectors;
  *
  * todo redis脚本限制操作，不要太频繁请求接口
  **/
-@RestController("user")
+@RestController
+@RequestMapping(value = "/user")
 public class UserController {
 
     @Reference(check = false)
     private IUserService userService;
 
-    @GetMapping(path = "user/{id}")
-    public ViewData<SysUser> user(@PathVariable String id){
-        return ViewData.data(ViewData.array(userService.getUserById(id)));
-    }
-
-    @GetMapping(path = "list")
+    @GetMapping(value = "/list")
     public ViewData<SysUser> list(PageDto pageDto,SysUser sysUser){
         return ViewData.data(userService.query(pageDto, sysUser),pageDto);
     }
 
-    @PostMapping(path = "update")
+    @GetMapping(value = "/detail/{id}")
+    public ViewData<SysUser> user(@PathVariable String id){
+        return ViewData.data(ViewData.array(userService.getUserById(id)));
+    }
+
+    @PostMapping(value = "/update")
     public Response update(SysUser user){
         try {
             userService.update(user);
@@ -45,7 +46,7 @@ public class UserController {
         return Response.OK;
     }
 
-    @PostMapping(path = "delete")
+    @PostMapping(value = "/delete")
     public Response delete(@RequestParam("id") String id){
         try {
             userService.delete(Long.valueOf(id));
@@ -55,7 +56,7 @@ public class UserController {
         return Response.OK;
     }
 
-    @GetMapping(path = "save")
+    @GetMapping(value = "/save")
     public Response save(SysUser user){
         try {
             userService.save(user);

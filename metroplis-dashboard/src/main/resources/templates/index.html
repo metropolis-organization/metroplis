@@ -52,10 +52,8 @@
                 <li class="layui-nav-item layui-nav-itemed">
                     <a class="" href="javascript:;">用户中心</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="javascript:;">用户管理</a></dd>
-                        <dd><a href="javascript:;">权限管理</a></dd>
-                        <dd><a href="javascript:;">角色管理</a></dd>
-                        <dd><a href="">超链接</a></dd>
+                        <dd><a lay-href="/user" lay-text="用户管理">用户管理</a></dd>
+                        <dd><a lay-href="/role" lay-text="权限管理">权限管理</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item">
@@ -71,10 +69,35 @@
             </ul>
         </div>
     </div>
-
+    <div class="layadmin-pagetabs"  style="left:0px">
+        <div style="position: absolute;left: 20px;">
+            <ul>
+                <li>
+                    <a href="javascript:;" layadmin-event="flexible" title="侧边伸缩" class="leftss">
+                        <i class="layui-icon layui-icon-shrink-right" id="LAY_app_flexible"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="layui-icon layadmin-tabs-control layui-icon-left" layadmin-event="leftPage" style="left:290px"></div>
+        <div class="layui-icon layadmin-tabs-control layui-icon-right" layadmin-event="rightPage" style="right:40px"></div>
+        <div class="layui-icon layadmin-tabs-control layui-icon-down">
+            <ul class="layui-nav layadmin-tabs-select" lay-filter="layadmin-pagetabs-nav">
+                <li class="layui-nav-item" lay-unselect>
+                    <a href="javascript:;"></a>
+                    <dl class="layui-nav-child layui-anim-fadein bgwhite">
+                        <dd class="tabdd" layadmin-event="closeThisTabs"><a href="javascript:;">关闭当前标签页</a></dd>
+                        <dd class="tabdd" layadmin-event="closeOtherTabs"><a href="javascript:;">关闭其它标签页</a></dd>
+                        <dd class="tabdd" layadmin-event="closeAllTabs"><a href="javascript:;">关闭全部标签页</a></dd>
+                    </dl>
+                </li>
+            </ul>
+        </div>
+    </div>
     <div class="layui-body">
         <!-- 内容主体区域 -->
         <div style="padding: 15px;">内容主体区域</div>
+
     </div>
 
     <div class="layui-footer">
