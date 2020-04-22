@@ -9,7 +9,7 @@ public class SsoConstant {
     public static final String SHIRO_TOKEN = "shiro_token";
 
     public static final String SHIRO_COOKIE_TOKEN = "shiro_cookie_token";
-
+    public static final String INDEX = "/index";
     public static final String LOGOUT = "/logout";
     public static final String SSO_OK = "ok";
     public static final String SSO_ERROR = "error";
