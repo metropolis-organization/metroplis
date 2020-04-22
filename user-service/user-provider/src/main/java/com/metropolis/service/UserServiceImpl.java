@@ -2,6 +2,7 @@ package com.metropolis.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.metropolis.common.entity.Pages;
 import com.metropolis.common.mybatis.MyBaitsManager;
 import com.metropolis.common.web.dto.PageDto;
 import com.metropolis.dal.persistence.SysUserMapper;
@@ -41,7 +42,7 @@ public class UserServiceImpl extends MyBaitsManager<SysUser> implements IUserSer
 
     @Transactional(readOnly = true)
     @Override
-    public List<SysUser> query(PageDto page, SysUser user) {
+    public Pages query(PageDto page, SysUser user) {
         return super.list(sysUserMapper.query(super.page(page),user));
     }
 

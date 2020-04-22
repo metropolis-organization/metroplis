@@ -3,9 +3,9 @@ package com.metropolis.common.mybatis;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.metropolis.common.entity.Pages;
 import com.metropolis.common.web.dto.PageDto;
 
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -26,14 +26,15 @@ public class MyBaitsManager<O> {
         return page;
     }
 
-    protected List<O> list(IPage<O> page){
+    protected Pages<O> list(IPage<O> page){
         PageDto pageDto = pageDtoThreadLocal.get();
-        if(Objects.isNull(pageDto)){return page.getRecords();}
+        if(Objects.isNull(pageDto)){return Pages.pages(page.getRecords(),pageDto);}
         pageDto.setPage(page.getCurrent());
         pageDto.setLimit(page.getSize());
-        pageDtoThreadLocal.remove();
-        return page.getRecords();
+        pageDto.setCount(page.getTotal());
+        return Pages.pages(page.getRecords(),pageDto);
     }
+
 
 }
 

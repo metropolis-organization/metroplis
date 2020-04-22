@@ -2,6 +2,7 @@ package com.metropolis.user;
 
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.metropolis.common.entity.Pages;
 import com.metropolis.common.web.dto.PageDto;
 import com.metropolis.user.entity.SysUser;
 
@@ -19,7 +20,7 @@ public interface IUserService  {
 
     SysUser getUserByName(String name);
 
-    List<SysUser> query(PageDto pageDto, SysUser user);
+    Pages query(PageDto pageDto, SysUser user);
 
     void save(SysUser user);
 

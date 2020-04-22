@@ -15,12 +15,14 @@ import java.util.List;
  **/
 @Data
 public class ViewData<D> implements Serializable {
+    private static final long serialVersionUID = 1L;
     /**
      * todo 后期想法，加上不同的支持注解，既可以将这个Data
      *  变成不同的符合要求json返回
      */
     private List<D> data;
     private PageDto page;
+    private Response response;
     /**
      * 其它需要展示到页面的参数进行拼装
      */
@@ -28,6 +30,23 @@ public class ViewData<D> implements Serializable {
         ViewData<D> d = new ViewData<>();
         d.setData(data);
         d.setPage(page);
+        d.setResponse(Response.OK);
+        return d;
+    }
+
+    public static <D> ViewData<D> data(Pages<D> pages){
+        ViewData<D> d = new ViewData<>();
+        d.setData(pages.getData());
+        d.setPage(pages.getPageDto());
+        d.setResponse(Response.OK);
+        return d;
+    }
+
+    public static <D> ViewData<D> data(List<D> data,PageDto page,Response response){
+        ViewData<D> d = new ViewData<>();
+        d.setData(data);
+        d.setPage(page);
+        d.setResponse(response);
         return d;
     }
     public static <D> ViewData<D> data(D[] data,PageDto pageDto){

@@ -3,13 +3,12 @@ package com.metropolis.parent.controller.user;
 import com.metropolis.common.entity.Response;
 import com.metropolis.common.entity.ViewData;
 import com.metropolis.common.web.dto.PageDto;
+import com.metropolis.layui.annotation.LayuiTable;
 import com.metropolis.user.IUserService;
 import com.metropolis.user.entity.SysUser;
 import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 /**
  * @program: metroplis
@@ -27,8 +26,9 @@ public class UserController {
     private IUserService userService;
 
     @GetMapping(value = "/list")
+    @LayuiTable
     public ViewData<SysUser> list(PageDto pageDto,SysUser sysUser){
-        return ViewData.data(userService.query(pageDto, sysUser),pageDto);
+        return ViewData.data(userService.query(pageDto, sysUser));
     }
 
     @GetMapping(value = "/detail/{id}")

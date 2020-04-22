@@ -76,7 +76,7 @@
     <!--新增所有列-->
     <insert id="saveUser" keyProperty="id" useGeneratedKeys="true" parameterType="sysUser">
         insert into sys_user(username, password, salt, locked, create_time, last_login_time, is_delete)
-        values (#{username}, #{password}, #{salt}, #{locked}, #{create_time}, #{lastLoginTime}, #{isDelete})
+        values (#{username}, #{password}, #{salt}, #{locked}, #{createtime}, #{lastLoginTime}, #{isDelete})
     </insert>
 
     <!--通过主键修改数据-->

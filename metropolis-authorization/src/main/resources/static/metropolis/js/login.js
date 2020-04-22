@@ -13,7 +13,7 @@ layui.use(['form','layer'],function(){
     form.on('submit(login-submit)', function (data) {
         data.field["successUrl"]=window.location.href.split('?')[1].split('=')[1];
         $.post('/login', data.field, function (r) {
-            if (r.code === '000000') {
+            if (r.code === '100000') {
                 // layer.msg(r.message);
                 location.href=r.message;
             } else {

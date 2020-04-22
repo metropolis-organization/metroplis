@@ -19,7 +19,9 @@
     <properties>
         <metropolis-common.version>1.0-SNAPSHOT</metropolis-common.version>
         <metropolis-sso.version>1.0-SNAPSHOT</metropolis-sso.version>
+        <metropolis-layui.version>1.0-SNAPSHOT</metropolis-layui.version>
         <user-api.version>0.0.1</user-api.version>
+
     </properties>
 
     <dependencies>
@@ -31,6 +33,13 @@
         </dependency>
 
         <!-- 其它模块组件-->
+
+        <dependency>
+            <groupId>com.metropolis.parent</groupId>
+            <artifactId>metropolis-layui</artifactId>
+            <version>${metropolis-layui.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>com.metropolis.sso</groupId>
             <artifactId>metropolis-sso</artifactId>

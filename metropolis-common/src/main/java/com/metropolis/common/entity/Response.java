@@ -10,7 +10,7 @@ import java.util.HashMap;
  * @date 2020/2/16 18:30
  */
 public class Response extends HashMap<String,Object> {
-
+    private static final long serialVersionUID = 1L;
     public static Response OK = new Response(SysCodeConstants.SUCCESS);
     public static Response FAILURE = new Response(SysCodeConstants.FAILURE);
     public static Response USERORPASSWORD_ERRROR = new Response(SysCodeConstants.USERORPASSWORD_ERRROR);
