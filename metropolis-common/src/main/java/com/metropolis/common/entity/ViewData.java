@@ -4,6 +4,7 @@ import com.metropolis.common.web.dto.PageDto;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -23,5 +24,20 @@ public class ViewData<D> implements Serializable {
     /**
      * 其它需要展示到页面的参数进行拼装
      */
-    public static ViewData data(){return new ViewData();}
+    public static <D> ViewData<D> data(List<D> data,PageDto page){
+        ViewData<D> d = new ViewData<>();
+        d.setData(data);
+        d.setPage(page);
+        return d;
+    }
+    public static <D> ViewData<D> data(D[] data,PageDto pageDto){
+        return data(Arrays.asList(data),pageDto);
+    }
+    public static <D> ViewData<D> data(D[] data){
+        return data(Arrays.asList(data),null);
+    }
+    public static <D> D[] array(D ...datas){return datas;}
+    public static <D> ViewData<D> data(List<D> data){
+        return data(data,null);
+    }
 }

@@ -18,8 +18,13 @@ import org.springframework.web.servlet.ModelAndView;
 public class HelloController extends ShiroController {
 
     @GetMapping(value = "index")
+    public ModelAndView hello(){
+        return Views.get("hello",Views.parmas("user",super.getCurrentUser()));
+    }
+
+    @GetMapping(value = "console")
     public ModelAndView index(){
-        return Views.get("index",Views.parmas("user",super.getCurrentUser()));
+        return Views.get("index");
     }
 
     @GetMapping(value = "user")

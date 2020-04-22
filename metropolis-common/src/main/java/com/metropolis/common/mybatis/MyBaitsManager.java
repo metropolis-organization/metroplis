@@ -20,8 +20,8 @@ public class MyBaitsManager<O> {
 
     protected IPage<O> page(PageDto pageDto){
         IPage<O> page = new Page<O>();
-        page.setSize(pageDto.getSize())
-                .setCurrent(pageDto.getCurrent());
+        page.setSize(pageDto.getLimit())
+                .setCurrent(pageDto.getPage());
         pageDtoThreadLocal.set(pageDto);
         return page;
     }
@@ -29,8 +29,8 @@ public class MyBaitsManager<O> {
     protected List<O> list(IPage<O> page){
         PageDto pageDto = pageDtoThreadLocal.get();
         if(Objects.isNull(pageDto)){return page.getRecords();}
-        pageDto.setCurrent(page.getCurrent());
-        pageDto.setSize(page.getSize());
+        pageDto.setPage(page.getCurrent());
+        pageDto.setLimit(page.getSize());
         pageDtoThreadLocal.remove();
         return page.getRecords();
     }

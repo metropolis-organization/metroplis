@@ -12,7 +12,7 @@ metropolis:
   shiro:
     cache-timeout: N/A
     cookie-timeout: 604800
-    anon-url: /layui/**,/metropolis/**,/regist,/captcha,/logout
+    anon-url: /layui/**,/metropolis/**,/regist,/captcha,/logout,/layuiadmin/**
     login-url: /login
     logout-url: /logoutsso
     success-url: /index
