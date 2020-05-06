@@ -1,5 +1,6 @@
 package com.metropolis.service;
 
+import com.metropolis.common.encrypt.PassworkHelper;
 import com.metropolis.common.entity.Pages;
 import com.metropolis.common.mybatis.MyBaitsManager;
 import com.metropolis.common.web.dto.PageDto;
@@ -52,6 +53,7 @@ public class UserServiceImpl extends MyBaitsManager<SysUser> implements IUserSer
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void save(SysUser user) {
+        PassworkHelper.encryptPassword(user);
         user.setUsername(user.getAccount());
         user.setCreatetime(new Date());
         user.setLastLoginTime(new Date());
