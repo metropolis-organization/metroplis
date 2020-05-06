@@ -1,8 +1,9 @@
 layui.use(['layer','element','table','form'], function(){
-    var element = layui.element,
+    var layer = layui.layer,
+        $_ = layui.jquery,
+        element = layui.element,
         table = layui.table,
-        form = layui.form,
-        $ = layui.jquery
+        form = layui.form
 
    // user-table 表
     table.render({
@@ -19,7 +20,8 @@ layui.use(['layer','element','table','form'], function(){
             {type:'numbers'}
             ,{type: 'checkbox'}
             ,{field:'id',title:'ID', width:100, unresize: true, sort: true,hide:true}
-            ,{field:'username', title:'用户名',unresize: true, templet: '#usernameTpl'}
+            ,{field:'account', title:'用户名',unresize: true}
+            ,{field:'username', title:'用户名',unresize: true}
             , {fixed: 'right', width: 165, align:'center', toolbar: '#barDemo'}
         ]]
         ,page: true
@@ -32,13 +34,14 @@ layui.use(['layer','element','table','form'], function(){
         switch(obj.event){
             case 'add':
                 layer.open({
-                    type: 1 //此处以iframe举例
+                    type: 1
                     ,title: '添加一个用户'
-                    ,area: ['390px', '260px']
+                    ,area: ['450px', '350px']
                     ,shade: 0
                     ,maxmin: false
+                    ,resize:false
                     ,offset: 'auto'
-                    ,content: $("#user-form")
+                    ,content: $_("#user-form")
                 });
                 break;
             case 'update':
@@ -88,27 +91,34 @@ layui.use(['layer','element','table','form'], function(){
     //表单自己定义
     //自定义验证规则
     form.verify({
-        title: function(value){
-            if(value.length < 5){
-                return '标题至少得5个字符啊';
+        account:function(value){
+          if(""===value){
+              return "账号不能为空";
+          }
+          if(value.length > 5&&value.length<16){
+                return '标题至少得5个字符,且不能超过16个字符';
+          }
+        },
+        pass_check: function(value){
+            if(""===value){
+                return "密码不能为空";
+            }
+            if(form.val('user-form').password!==value){
+                return '密码不一致';
             }
         }
         ,pass: [
             /^[\S]{6,12}$/
             ,'密码必须6到12位，且不能出现空格'
         ]
-        ,content: function(value){
-            layedit.sync(editIndex);
-        }
     });
 
     //监听提交
     form.on('submit(sm)', function(data){
-        //
         $.ajax({
-            type: "POST",
+            type: "post",
             url: "/user/save",
-            data: data,
+            data: data.field,
             success: function(msg){
                 layer.msg(msg.msg);
             }

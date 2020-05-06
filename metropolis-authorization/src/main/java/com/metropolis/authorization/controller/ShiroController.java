@@ -34,10 +34,10 @@ public class ShiroController {
     protected void logout(){getSubject().logout();}
 
     protected UsernamePasswordToken getToken(SysUser user,boolean rememberMe){
-        return new UsernamePasswordToken(user.getUsername(),user.getPassword(),rememberMe);
+        return new UsernamePasswordToken(user.getAccount(),user.getPassword(),rememberMe);
     }
     protected UsernamePasswordToken getToken(SysUser user){
-        return new UsernamePasswordToken(user.getUsername(),user.getPassword(),false);
+        return new UsernamePasswordToken(user.getAccount(),user.getPassword(),false);
     }
 
 

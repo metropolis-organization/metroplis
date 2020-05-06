@@ -10,6 +10,8 @@ import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
+
 /**
  * @author Pop
  * @date 2020/3/17 17:14
@@ -50,6 +52,11 @@ public class UserServiceImpl extends MyBaitsManager<SysUser> implements IUserSer
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void save(SysUser user) {
+        user.setUsername(user.getAccount());
+        user.setCreatetime(new Date());
+        user.setLastLoginTime(new Date());
+        user.setIsDelete(Boolean.FALSE);
+        user.setLocked(Boolean.FALSE);
         sysUserMapper.save(user);
     }
 

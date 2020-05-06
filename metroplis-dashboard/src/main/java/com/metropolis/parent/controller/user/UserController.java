@@ -56,7 +56,7 @@ public class UserController {
         return Response.OK;
     }
 
-    @GetMapping(value = "/save")
+    @PostMapping(value = "/save")
     public Response save(SysUser user){
         try {
             userService.save(user);
