@@ -17,6 +17,13 @@ public interface ISysUserService extends IService<SysUser> {
     SysUser findUserByName(String username);
 
     /**
+     * 根据账号，获得用户
+     * @param account
+     * @return
+     */
+    SysUser findUserByAccount(String account);
+
+    /**
      * 增加一个用户
      * @param user
      */

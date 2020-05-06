@@ -15,6 +15,8 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
 
     SysUser findUserByName(@Param("username") String username);
 
+    SysUser findUserByAccount(@Param("account") String account);
+
     void saveUser(SysUser user);
 
     void deleteUser(long id);

@@ -21,10 +21,8 @@ metropolis:
     unauthorized-url: /unauthorized
 spring:
   redis:
-    password: 123
     database: 0
     host: redis.metropolis.com
-
 dubbo:
    application:
      name: metropolis-dashborad
@@ -38,3 +36,5 @@ dubbo:
      group: dubbo-dev
    scan:
      base-packages: com.metropolis.parent.controller
+   consumer:
+     timeout: 3000

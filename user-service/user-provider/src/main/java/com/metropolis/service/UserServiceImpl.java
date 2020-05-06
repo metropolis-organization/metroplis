@@ -1,7 +1,5 @@
 package com.metropolis.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.metropolis.common.entity.Pages;
 import com.metropolis.common.mybatis.MyBaitsManager;
 import com.metropolis.common.web.dto.PageDto;
@@ -11,8 +9,6 @@ import com.metropolis.user.entity.SysUser;
 import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 /**
  * @author Pop
@@ -38,6 +34,11 @@ public class UserServiceImpl extends MyBaitsManager<SysUser> implements IUserSer
     @Override
     public SysUser getUserByName(String name) {
         return sysUserMapper.getUserByName(name);
+    }
+
+    @Override
+    public SysUser getUserByAccount(String account) {
+        return sysUserMapper.getUserByAccount(account);
     }
 
     @Transactional(readOnly = true)

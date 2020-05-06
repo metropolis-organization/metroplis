@@ -22,7 +22,10 @@ public class SysUser implements Serializable {
     //用户主键id    
     @TableId(value = "id", type = IdType.AUTO)        
     private Long id;
-    
+
+    //账号
+    @TableField("account")
+    private String account;
 
     //用户名    
         @TableField("username")    

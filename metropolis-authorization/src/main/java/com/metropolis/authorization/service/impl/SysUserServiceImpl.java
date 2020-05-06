@@ -24,6 +24,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         return this.baseMapper.findUserByName(username);
     }
 
+    @Override
+    public SysUser findUserByAccount(String account) {
+        return this.baseMapper.findUserByAccount(account);
+    }
+
     @Transactional
     @Override
     public void saveUser(SysUser user) {

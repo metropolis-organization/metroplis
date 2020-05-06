@@ -20,6 +20,8 @@ public interface IUserService  {
 
     SysUser getUserByName(String name);
 
+    SysUser getUserByAccount(String account);
+
     Pages query(PageDto pageDto, SysUser user);
 
     void save(SysUser user);

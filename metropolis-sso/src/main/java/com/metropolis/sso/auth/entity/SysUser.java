@@ -18,6 +18,8 @@ public class SysUser implements Serializable {
     //用户主键id
     private Long id;
     
+    //账号
+    private String account;
 
     //用户名
     private String username;

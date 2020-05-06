@@ -12,6 +12,8 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
 
     SysUser getUserByName(@Param("name") String name);
 
+    SysUser getUserByAccount(@Param("account") String name);
+
     IPage<SysUser> query(IPage<?> page,@Param("user") SysUser user);
 
     void save(@Param("user") SysUser user);

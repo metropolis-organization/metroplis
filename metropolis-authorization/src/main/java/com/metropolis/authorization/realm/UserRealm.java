@@ -68,16 +68,16 @@ public class UserRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
 
-        String username = (String) authenticationToken.getPrincipal();
+        String account = (String) authenticationToken.getPrincipal();
         String password = StringUtils.buildString((char[]) authenticationToken.getCredentials());
 
-        SysUser user = userService.findUserByName(username);
+        SysUser user = userService.findUserByAccount(account);
 
         if(Objects.isNull(user)){
             throw new UnknownAccountException("账号不存在。");
         }
         if(PassworkHelper.checkPassword(user,password)){
-            throw new IncorrectCredentialsException("用户名或密码错误。");
+            throw new IncorrectCredentialsException("账号或密码错误。");
         }
         if(Boolean.TRUE.equals(user.getLocked())) {
             throw new LockedAccountException("账号已被锁定。");
