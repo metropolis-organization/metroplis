@@ -26,11 +26,6 @@
 
   <dependencies>
 
-    <dependency>
-      <groupId>com.metropolis.user</groupId>
-      <artifactId>user-api</artifactId>
-      <version>0.0.1</version>
-    </dependency>
 
     <dependency>
       <groupId>com.baomidou</groupId>

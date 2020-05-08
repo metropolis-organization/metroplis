@@ -61,7 +61,7 @@
                 and locked = #{user.locked}
             </if>
             <if test="user.createtime != null">
-                and createtime = #{user.createtime}
+                and create_time = #{user.createtime}
             </if>
             <if test="user.lastLoginTime != null">
                 and last_login_time = #{user.lastLoginTime}
@@ -70,7 +70,7 @@
                 and is_delete = #{user.isDelete}
             </if>
         </where>
-        order by createtime
+        order by create_time desc
     </select>
 
     <!--新增所有列-->

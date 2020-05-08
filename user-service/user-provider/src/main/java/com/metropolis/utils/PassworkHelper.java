@@ -1,4 +1,4 @@
-package com.metropolis.common.encrypt;
+package com.metropolis.utils;
 
 import com.metropolis.user.entity.SysUser;
 import org.apache.shiro.crypto.RandomNumberGenerator;
@@ -16,22 +16,20 @@ public class PassworkHelper {
     private static final int HASH_ITERATIONS = 1;
 
     public static boolean checkPassword(SysUser user, String password){
-        String checkPassword = new SimpleHash(
-                ALGORITHM_NAME,
-                password,
-                ByteSource.Util.bytes(user.getCredentialsSalt()),
-                HASH_ITERATIONS).toHex();
-        return !checkPassword.equals(user.getPassword());
+        return !password(user).equals(user.getPassword());
+    }
+
+    private static String password(SysUser user){
+       return  new SimpleHash(
+               ALGORITHM_NAME,
+               user.getPassword(),
+               ByteSource.Util.bytes(user.getCredentialsSalt()),
+               HASH_ITERATIONS).toHex();
     }
 
     public static SysUser encryptPassword(SysUser user) {
         user.setSalt(randomNumberGenerator.nextBytes().toHex());
-        String newPassword = new SimpleHash(
-                ALGORITHM_NAME,
-                user.getPassword(),
-                ByteSource.Util.bytes(user.getCredentialsSalt()),
-                HASH_ITERATIONS).toHex();
-        user.setPassword(newPassword);
+        user.setPassword(password(user));
         return user;
     }
 

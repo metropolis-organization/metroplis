@@ -92,6 +92,7 @@ layui.use(['layer','element','table','form'], function(){
     //自定义验证规则
     form.verify({
         account:function(value){
+          //增加一个账号是否存在的验证
           if(""===value){
               return "账号不能为空";
           }
@@ -120,7 +121,7 @@ layui.use(['layer','element','table','form'], function(){
             url: "/user/save",
             data: data.field,
             success: function(msg){
-                layer.msg(msg.msg);
+                layer.msg(msg);
             }
         });
         return false;

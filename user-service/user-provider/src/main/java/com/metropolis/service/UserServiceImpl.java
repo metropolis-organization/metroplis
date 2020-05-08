@@ -1,12 +1,14 @@
 package com.metropolis.service;
 
-import com.metropolis.common.encrypt.PassworkHelper;
 import com.metropolis.common.entity.Pages;
 import com.metropolis.common.mybatis.MyBaitsManager;
+import com.metropolis.common.string.StringUtils;
 import com.metropolis.common.web.dto.PageDto;
 import com.metropolis.dal.persistence.SysUserMapper;
 import com.metropolis.user.IUserService;
 import com.metropolis.user.entity.SysUser;
+import com.metropolis.utils.PassworkHelper;
+import com.metropolis.utils.UsernameGenerator;
 import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,7 +56,9 @@ public class UserServiceImpl extends MyBaitsManager<SysUser> implements IUserSer
     @Override
     public void save(SysUser user) {
         PassworkHelper.encryptPassword(user);
-        user.setUsername(user.getAccount());
+        if (StringUtils.isEmpty(user.getUsername())){
+            user.setUsername(UsernameGenerator.generate());
+        }
         user.setCreatetime(new Date());
         user.setLastLoginTime(new Date());
         user.setIsDelete(Boolean.FALSE);

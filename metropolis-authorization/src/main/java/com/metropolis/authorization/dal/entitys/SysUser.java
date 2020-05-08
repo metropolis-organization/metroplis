@@ -63,6 +63,6 @@ public class SysUser implements Serializable {
 
 
     private String credentialsSalt;
-    public String getCredentialsSalt(){return username+salt;}
+    public String getCredentialsSalt(){return account+salt;}
 
 }

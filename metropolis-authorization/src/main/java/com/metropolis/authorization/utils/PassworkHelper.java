@@ -15,24 +15,38 @@ public class PassworkHelper {
     private static final String ALGORITHM_NAME = "md5";
     private static final int HASH_ITERATIONS = 1;
 
-    public static boolean checkPassword(SysUser user,String password){
-        String checkPassword = new SimpleHash(
-                ALGORITHM_NAME,
-                password,
-                ByteSource.Util.bytes(user.getCredentialsSalt()),
-                HASH_ITERATIONS).toHex();
-        return !checkPassword.equals(user.getPassword());
+    public static boolean checkPassword(SysUser user, String password){
+        return !password(user,password).equals(user.getPassword());
     }
 
-    public static SysUser encryptPassword(SysUser user) {
-        user.setSalt(randomNumberGenerator.nextBytes().toHex());
-        String newPassword = new SimpleHash(
+    private static String password(SysUser user){
+        return  new SimpleHash(
                 ALGORITHM_NAME,
                 user.getPassword(),
                 ByteSource.Util.bytes(user.getCredentialsSalt()),
                 HASH_ITERATIONS).toHex();
-        user.setPassword(newPassword);
+    }
+
+    private static String password(SysUser user,String checkPassword){
+        return  new SimpleHash(
+                ALGORITHM_NAME,
+                checkPassword,
+                ByteSource.Util.bytes(user.getCredentialsSalt()),
+                HASH_ITERATIONS).toHex();
+    }
+
+    public static SysUser encryptPassword(SysUser user) {
+        user.setSalt(randomNumberGenerator.nextBytes().toHex());
+        user.setPassword(password(user));
         return user;
+    }
+
+    public static void main(String[] args) {
+        String s = "ff771e5b962170c0c24428ba0e7de4f33a";
+        SysUser user = new SysUser();
+        user.setCredentialsSalt(s);
+        user.setPassword("123456");
+        System.out.println(password(user));
     }
 
 }
