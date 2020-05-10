@@ -18,6 +18,12 @@ public class MyBaitsManager<O> {
 
     private final ThreadLocal<PageDto> pageDtoThreadLocal = new ThreadLocal<>();
 
+    protected  IPage<O> defaultPage(){
+        IPage<O> page = new Page<O>();
+        page.setSize(1).setCurrent(1);
+        return page;
+    }
+
     protected IPage<O> page(PageDto pageDto){
         IPage<O> page = new Page<O>();
         page.setSize(pageDto.getLimit())

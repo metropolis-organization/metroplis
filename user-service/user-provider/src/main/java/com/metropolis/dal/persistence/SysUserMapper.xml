@@ -73,10 +73,53 @@
         order by create_time desc
     </select>
 
+    <!--传入某个属性或者若干的属性，查看对象是否存在-->
+    <select id="check" resultMap="SysUserMap">
+        select
+        id,account,username
+        from sys_user
+        <where>
+            <if test="user.id != null">
+                and id = #{user.id}
+            </if>
+            <if test="user.account != null and user.account != ''">
+                and account = #{user.account}
+            </if>
+            <if test="user.username != null and user.username != ''">
+                and username = #{user.username}
+            </if>
+            <if test="user.password != null and user.password != ''">
+                and password = #{user.password}
+            </if>
+            <if test="user.salt != null and user.salt != ''">
+                and salt = #{user.salt}
+            </if>
+            <if test="user.locked != null">
+                and locked = #{user.locked}
+            </if>
+            <if test="user.createtime != null">
+                and create_time = #{user.createtime}
+            </if>
+            <if test="user.lastLoginTime != null">
+                and last_login_time = #{user.lastLoginTime}
+            </if>
+            <if test="user.isDelete != null">
+                and is_delete = #{user.isDelete}
+            </if>
+        </where>
+    </select>
+
     <!--新增所有列-->
     <insert id="save" keyProperty="id" useGeneratedKeys="true">
-        insert into metropolis.sys_user(account,username, password, salt, locked, create_time, last_login_time, is_delete)
+        insert into sys_user(account,username, password, salt, locked, create_time, last_login_time, is_delete)
         values (#{user.account},#{user.username}, #{user.password}, #{user.salt}, #{user.locked}, #{user.createtime}, #{user.lastLoginTime}, #{user.isDelete})
+    </insert>
+
+    <insert id="batchSave">
+        insert into sys_user(account,username, password, salt, locked, create_time, last_login_time, is_delete) values
+        <foreach collection="users" item="user"  separator="," >
+            (#{user.account},#{user.username}, #{user.password}, #{user.salt}, #{user.locked}, #{user.createtime}, #{user.lastLoginTime}, #{user.isDelete})
+        </foreach>
     </insert>
 
     <!--通过主键修改数据-->

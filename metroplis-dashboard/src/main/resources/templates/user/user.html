@@ -22,8 +22,22 @@
     </div>
 
     <script type="text/html" id="toolbarDemo">
-        <div class="layui-btn-container">
-            <button class="layui-btn layui-btn layui-btn-normal" lay-event="add">添加</button>
+        <div class="layui-btn-group">
+            <button type="button" class="layui-btn layui-btn-sm" lay-event="add">
+                <i class="layui-icon">&#xe654;</i>
+            </button>
+            <button type="button" class="layui-btn layui-btn-sm" lay-event="delete">
+                <i class="layui-icon">&#xe640;</i>
+            </button>
+            <button type="button" class="layui-btn layui-btn-sm" lay-event="template">
+                excel模版下载
+            </button>
+            <button type="button" class="layui-btn layui-btn-sm" lay-event="import">
+                excel导入
+            </button>
+            <button type="button" class="layui-btn layui-btn-sm" lay-event="export">
+                excel导出
+            </button>
         </div>
     </script>
 
@@ -38,7 +52,7 @@
     </script>
 </body>
 <!-- 新增用户名 -->
-<form class="layui-form" action="" lay-filter="user-form" id="user-form" style="display: none;margin: 5%;">
+<form class="layui-form layui-form-pane" action="" lay-filter="user-form" id="user-form" style="display: none;margin: 5%;">
     <div class="layui-form-item">
         <label class="layui-form-label">账号</label>
         <div class="layui-input-block">
@@ -65,11 +79,44 @@
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
-            <button type="submit" class="layui-btn" lay-submit="" lay-filter="sm">立即提交</button>
-            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            <button type="submit" class="layui-btn layui-btn-sm" lay-submit="" lay-filter="sm">提交并关闭</button>
+            <button type="submit" class="layui-btn layui-btn-sm" lay-submit="" lay-filter="sm-again">提交后继续添加</button>
+            <button type="reset" class="layui-btn layui-btn-sm layui-btn-primary">重置</button>
         </div>
     </div>
 </form>
+<!--修改用户-->
+<form class="layui-form layui-form-pane" action="" lay-filter="user-form-update" id="user-form-update" style="display: none;margin: 5%;">
+    <input name="id" type="hidden"/>
+    <div class="layui-form-item">
+        <label class="layui-form-label">用户名</label>
+        <div class="layui-input-block">
+            <input type="text" name="username"  autocomplete="off" placeholder="请输入用户名" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button type="submit" class="layui-btn layui-btn-sm" lay-submit="" lay-filter="sm-update">修改</button>
+            <button type="reset" class="layui-btn layui-btn-sm layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+<!-- 查看-->
+<form class="layui-form layui-form-pane" action="" lay-filter="user-form-view" id="user-form-view" style="display: none;margin: 5%;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">账号</label>
+        <div class="layui-input-block">
+            <input type="text" name="account" lay-verify="account" disabled autocomplete="off" placeholder="请输入账号" class="layui-input layui-disabled">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">用户名</label>
+        <div class="layui-input-block">
+            <input type="text" name="username"  autocomplete="off" disabled placeholder="请输入用户名" class="layui-input layui-disabled">
+        </div>
+    </div>
+</form>
+
 <script th:src="@{/js/jquery.min.js}"></script>
 <script th:src="@{/layuiadmin/layui/layui.js}"></script>
 <script th:src="@{/js/user/user.js}"></script>

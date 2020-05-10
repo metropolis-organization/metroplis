@@ -1,8 +1,10 @@
 package com.metropolis.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.metropolis.common.entity.Pages;
 import com.metropolis.common.mybatis.MyBaitsManager;
 import com.metropolis.common.string.StringUtils;
+import com.metropolis.common.utils.CollectionsUtils;
 import com.metropolis.common.web.dto.PageDto;
 import com.metropolis.dal.persistence.SysUserMapper;
 import com.metropolis.user.IUserService;
@@ -14,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Pop
@@ -52,6 +55,16 @@ public class UserServiceImpl extends MyBaitsManager<SysUser> implements IUserSer
         return super.list(sysUserMapper.query(super.page(page),user));
     }
 
+    @Override
+    public boolean check(SysUser user) {
+        List<SysUser> users = sysUserMapper.check(super.defaultPage(),user).getRecords();
+        if(CollectionsUtils.isEmpty(users)&&users.size()==0){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void save(SysUser user) {
@@ -64,6 +77,11 @@ public class UserServiceImpl extends MyBaitsManager<SysUser> implements IUserSer
         user.setIsDelete(Boolean.FALSE);
         user.setLocked(Boolean.FALSE);
         sysUserMapper.save(user);
+    }
+
+    @Override
+    public void batchSave(List<SysUser> users) {
+        sysUserMapper.batchSave(users);
     }
 
     @Transactional(rollbackFor = Exception.class)

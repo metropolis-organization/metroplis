@@ -24,11 +24,17 @@ public interface IUserService  {
 
     Pages query(PageDto pageDto, SysUser user);
 
+    boolean check(SysUser user);
+
     void save(SysUser user);
+
+    void batchSave(List<SysUser> users);
 
     void update(SysUser user);
 
     void delete(long id);
 
     void batchDelete(long[] ids);
+
+
 }

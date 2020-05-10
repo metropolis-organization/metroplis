@@ -15,6 +15,7 @@ public class Response extends HashMap<String,Object> {
     public static Response FAILURE = new Response(SysCodeConstants.FAILURE);
     public static Response USERORPASSWORD_ERRROR = new Response(SysCodeConstants.USERORPASSWORD_ERRROR);
     public static Response TOKEN_VALID_FAILED = new Response(SysCodeConstants.TOKEN_VALID_FAILED);
+    public static Response USERNAME_ALREADY_EXISTS = new Response(SysCodeConstants.USERNAME_ALREADY_EXISTS);
 
     public static final String CODE = "code";
     public static final String MESSAGE = "message";

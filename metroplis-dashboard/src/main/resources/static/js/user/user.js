@@ -1,9 +1,13 @@
 layui.use(['layer','element','table','form'], function(){
     var layer = layui.layer,
-        $_ = layui.jquery,
+        $_ = layui.$,
+        addForm = document.getElementById("user-form"),
+        accountInput = $("#user-form input[name=account]"),
+        lastAccount = "",//上一次的填写的名字，避免重复查询
+        repeatAccount = false,
         element = layui.element,
         table = layui.table,
-        form = layui.form
+        form = layui.form;
 
    // user-table 表
     table.render({
@@ -50,24 +54,45 @@ layui.use(['layer','element','table','form'], function(){
                 } else if(data.length > 1){
                     layer.msg('只能同时编辑一个');
                 } else {
-                    layer.alert('编辑 [id]：'+ checkStatus.data[0].id);
+                    //赋值
+                    form.val('user-form-update',obj.data);
+                    layer.open({
+                        type: 1
+                        ,title: '修改用户'
+                        ,area: ['450px', '350px']
+                        ,shade: 0
+                        ,maxmin: false
+                        ,resize:false
+                        ,offset: 'auto'
+                        ,content: $_("#user-form-update")
+                    });
                 }
                 break;
             case 'delete':
                 if(data.length === 0){
                     layer.msg('请选择一行');
                 } else {
-                    $.ajax({
-                        type: "POST",
-                        url: "/user/delete",
-                        data: {id:data[0].id},
-                        success: function(msg){
-                            layer.msg(msg.msg);
-                        }
+                    layer.confirm('真的删除这'+data.length+"条吗?", function(index){
+                        var ids=data.map(
+                            function(value,index,array){
+                                return value.id;
+                            }
+                        );
+                        $.ajax({
+                            type: "POST",
+                            url: "/user/batchDelete",
+                            data: {ids:ids.toString()},
+                            success: function(msg){
+                                data.del();
+                                layer.msg(msg.message);
+                                layer.close(index);
+                                table.reload();
+                            }
+                        });
                     });
                 }
                 break;
-        };
+        }
     });
 
     //监听行工具事件
@@ -75,16 +100,67 @@ layui.use(['layer','element','table','form'], function(){
         var data = obj.data //获得当前行数据
             ,layEvent = obj.event; //获得 lay-event 对应的值
         if(layEvent === 'detail'){
-            layer.msg('查看操作');
+            form.val('user-form-view',obj.data);
+            layer.open({
+                type: 1
+                ,title: '查看'
+                ,area: ['450px', '350px']
+                ,shade: 0
+                ,maxmin: false
+                ,resize:false
+                ,offset: 'auto'
+                ,content: $_("#user-form-view")
+            });
         } else if(layEvent === 'del'){
             layer.confirm('真的删除行么', function(index){
-                obj.del(); //删除对应行（tr）的DOM结构
-                layer.close(index);
-                //向服务端发送删除指令
+                $.ajax({
+                    type: "POST",
+                    url: "/user/delete",
+                    data: {id:data.id},
+                    success: function(msg){
+                        obj.del();
+                        layer.msg(msg.message);
+                        table.reload();
+                        layer.close(index);
+                    }
+                });
             });
         } else if(layEvent === 'edit'){
-            layer.msg('编辑操作');
+            form.val('user-form-update',obj.data);
+            layer.open({
+                type: 1
+                ,title: '修改用户'
+                ,area: ['450px', '350px']
+                ,shade: 0
+                ,maxmin: false
+                ,resize:false
+                ,offset: 'auto'
+                ,content: $_("#user-form-update")
+            });
         }
+    });
+
+
+    //检测用户名是否重复
+    accountInput.focusout(function(e) {
+        var value = accountInput.val();
+        if(""===value){return;}
+        if(lastAccount===value){return}
+        else{lastAccount=value;}
+        $.ajax({
+            type: "post",
+            url: "/user/check",
+            data: {account:value},
+            async:false,
+            success: function(msg){
+                if("000000"!==msg.code){
+                    repeatAccount = true;
+                    layer.msg(msg.message);
+                }else{
+                    repeatAccount = false;
+                }
+            }
+        });
     });
 
 
@@ -116,12 +192,51 @@ layui.use(['layer','element','table','form'], function(){
 
     //监听提交
     form.on('submit(sm)', function(data){
+        if(repeatAccount){
+            $.ajax({
+                type: "post",
+                url: "/user/save",
+                data: data.field,
+                success: function(msg){
+                    layer.msg(msg.message);
+                    table.reload();
+                    layer.closeAll();
+                }
+            });
+        }else{
+            layer.msg("重复的账号");
+        }
+        return false;
+    });
+
+    form.on('submit(sm-again)', function(data){
+        if(repeatAccount){
+            $.ajax({
+                type: "post",
+                url: "/user/save",
+                data: data.field,
+                success: function(msg){
+                    layer.msg(msg.message);
+                    addForm.reset();
+                    table.reload();
+                }
+            });
+        }else{
+            layer.msg("重复的账号");
+        }
+        return false;
+    });
+
+    //监听更新
+    form.on('submit(sm-update)', function(data){
         $.ajax({
             type: "post",
-            url: "/user/save",
+            url: "/user/update",
             data: data.field,
             success: function(msg){
-                layer.msg(msg);
+                layer.msg(msg.message);
+                table.reload();
+                layer.closeAll();
             }
         });
         return false;
